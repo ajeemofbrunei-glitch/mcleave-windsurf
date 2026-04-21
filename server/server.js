@@ -164,30 +164,37 @@ app.post('/api/auth/crew-signup', authLimiter, async (req, res) => {
   const { name, username, phone, designation, password, admin_id } = req.body;
   const ipAddress = req.ip || req.connection.remoteAddress;
 
+  console.log('Crew signup attempt:', { name, username, designation, admin_id });
+
   try {
     // Validate required fields
     if (!name || !username || !password || !admin_id || !designation) {
+      console.log('Crew signup failed: Missing required fields', { name, username, password: !!password, admin_id, designation });
       return res.status(400).json({ error: 'Please fill in all required fields' });
     }
 
     if (password.length < 6) {
+      console.log('Crew signup failed: Password too short');
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
     // Check if username already exists
     const existingCrew = dbClient.getCrewByUsername(username);
+    console.log('Existing crew check:', username, !!existingCrew);
     if (existingCrew) {
       return res.status(400).json({ error: 'Username already exists' });
     }
 
     // Check if admin exists
     const admin = dbClient.getAdminById(admin_id);
+    console.log('Admin lookup:', admin_id, !!admin);
     if (!admin) {
       return res.status(400).json({ error: 'Selected store not found' });
     }
 
     // Create crew member
     const id = `crew-${Date.now()}`;
+    console.log('Creating crew with ID:', id);
     const crew = await dbClient.createCrew({
       id,
       name,
@@ -200,6 +207,7 @@ app.post('/api/auth/crew-signup', authLimiter, async (req, res) => {
       annual_leave_balance: 0,
       leave_year: new Date().getFullYear(),
     });
+    console.log('Crew created successfully:', crew.id);
 
     dbClient.logAudit(id, 'crew', 'CREW_CREATED', `Name: ${name}, Store: ${admin.store_name}`, ipAddress);
 
@@ -224,7 +232,7 @@ app.post('/api/auth/crew-signup', authLimiter, async (req, res) => {
     });
   } catch (error) {
     console.error('Crew sign up error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 
