@@ -215,6 +215,17 @@ const dbClient = {
     stmt.run(...values);
   },
 
+  resetPassword: async (id, newPassword) => {
+    const validation = validatePassword(newPassword);
+    if (!validation.isValid) {
+      throw new Error(validation.errors.join(', '));
+    }
+
+    const hashed = await hashPassword(newPassword);
+    const stmt = db.prepare('UPDATE admin_profiles SET password = ? WHERE id = ?');
+    stmt.run(hashed, id);
+  },
+
   getAllAdmins: () => {
     const stmt = db.prepare('SELECT id, email, store_name, store_location, role, plan, whatsapp_enabled, is_active, maintenance_mode, created_at FROM admin_profiles ORDER BY created_at DESC');
     return stmt.all();
@@ -385,4 +396,4 @@ const dbClient = {
   },
 };
 
-module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, getAuditLogs };
+module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, getAuditLogs, resetPassword };

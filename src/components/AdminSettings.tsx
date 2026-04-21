@@ -68,8 +68,8 @@ export function AdminSettings({ onToast }: {
   }
 
   async function updatePassword() {
-    if (!newPassword || newPassword.length < 6) {
-      onToast('Error', 'Password must be at least 6 characters', 'denied', '❌');
+    if (!newPassword) {
+      onToast('Error', 'Please enter a new password', 'denied', '❌');
       return;
     }
 
@@ -83,10 +83,23 @@ export function AdminSettings({ onToast }: {
       return;
     }
 
+    // Password complexity validation
+    const errors = [];
+    if (newPassword.length < 8) errors.push('at least 8 characters');
+    if (!/[A-Z]/.test(newPassword)) errors.push('one uppercase letter');
+    if (!/[a-z]/.test(newPassword)) errors.push('one lowercase letter');
+    if (!/[0-9]/.test(newPassword)) errors.push('one number');
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) errors.push('one special character');
+
+    if (errors.length > 0) {
+      onToast('Error', `Password must contain ${errors.join(', ')}`, 'denied', '❌');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await adminApi.updateAdmin(user.id, { password: newPassword });
+      await adminApi.resetPassword(user.id, newPassword);
       onToast('Success', 'Password updated successfully', 'success', '✅');
       setNewPassword('');
       setConfirmPassword('');

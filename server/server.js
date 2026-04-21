@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit } = require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, resetPassword } = require('./database');
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
@@ -174,6 +174,36 @@ app.put('/api/admin/profiles/:id', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error updating admin:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/admin/reset-password', authenticateToken, async (req, res) => {
+  try {
+    const { userId, newPassword, currentPassword } = req.body;
+    const ipAddress = req.ip || req.connection.remoteAddress;
+
+    // Get user info from token
+    const user = req.user;
+
+    // Verify current password for self-reset
+    if (user.userId === userId) {
+      const admin = dbClient.getAdminById(userId);
+      if (!admin) {
+        return res.status(404).json({ error: 'Admin not found' });
+      }
+      const isValid = await verifyPassword(currentPassword, admin.password);
+      if (!isValid) {
+        logAudit(userId, 'admin', 'PASSWORD_RESET_FAILED', 'Invalid current password', ipAddress);
+        return res.status(401).json({ error: 'Current password is incorrect' });
+      }
+    }
+
+    await resetPassword(userId, newPassword);
+    logAudit(userId, 'admin', 'PASSWORD_RESET_SUCCESS', `Reset by ${user.userId === userId ? 'self' : 'admin'}`, ipAddress);
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error('Error resetting password:', error);
+    res.status(400).json({ error: error.message || 'Failed to reset password' });
   }
 });
 

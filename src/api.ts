@@ -153,6 +153,13 @@ export const adminApi = {
       body: JSON.stringify({ enabled }),
     });
   },
+
+  resetPassword: async (userId: string, newPassword: string, currentPassword?: string): Promise<void> => {
+    await apiCall('/admin/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ userId, newPassword, currentPassword }),
+    });
+  },
 };
 
 // Crew API
