@@ -14,6 +14,11 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '../../dist');
   app.use(express.static(distPath));
+  
+  // Serve index.html at root
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
 }
 
 // Root route - API info
