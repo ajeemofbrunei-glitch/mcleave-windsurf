@@ -201,7 +201,7 @@ app.post('/api/admin/reset-password', authenticateToken, async (req, res) => {
     await resetPassword(userId, newPassword);
     dbClient.logAudit(userId, 'admin', 'PASSWORD_RESET_SUCCESS', `Reset by ${user.userId === userId ? 'self' : 'admin'}`, ipAddress);
     res.json({ success: true });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error resetting password:', error);
     res.status(400).json({ error: error.message || 'Failed to reset password' });
   }
