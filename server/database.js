@@ -157,21 +157,33 @@ const dbClient = {
   updateAdmin: async (id, updates) => {
     const fields = [];
     const values = [];
-    
+
     if (updates.store_name !== undefined) { fields.push('store_name = ?'); values.push(updates.store_name); }
     if (updates.store_location !== undefined) { fields.push('store_location = ?'); values.push(updates.store_location); }
     if (updates.plan !== undefined) { fields.push('plan = ?'); values.push(updates.plan); }
     if (updates.whatsapp_enabled !== undefined) { fields.push('whatsapp_enabled = ?'); values.push(updates.whatsapp_enabled ? 1 : 0); }
-    if (updates.password !== undefined) { 
+    if (updates.maintenance_mode !== undefined) { fields.push('maintenance_mode = ?'); values.push(updates.maintenance_mode ? 1 : 0); }
+    if (updates.is_active !== undefined) { fields.push('is_active = ?'); values.push(updates.is_active ? 1 : 0); }
+    if (updates.password !== undefined) {
       const hashed = await hashPassword(updates.password);
-      fields.push('password = ?'); values.push(hashed); 
+      fields.push('password = ?'); values.push(hashed);
     }
-    
+
     if (fields.length === 0) return;
-    
+
     values.push(id);
     const stmt = db.prepare(`UPDATE admin_profiles SET ${fields.join(', ')} WHERE id = ?`);
     stmt.run(...values);
+  },
+
+  getAllAdmins: () => {
+    const stmt = db.prepare('SELECT id, email, store_name, store_location, role, plan, whatsapp_enabled, is_active, maintenance_mode, created_at FROM admin_profiles ORDER BY created_at DESC');
+    return stmt.all();
+  },
+
+  getAdminById: (id) => {
+    const stmt = db.prepare('SELECT * FROM admin_profiles WHERE id = ?');
+    return stmt.get(id);
   },
 
   // Crew functions

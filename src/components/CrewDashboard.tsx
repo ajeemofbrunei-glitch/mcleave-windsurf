@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { leaveRequestApi, crewApi, blockedDateApi } from '../api';
+import { leaveRequestApi, crewApi, blockedDateApi, adminApi } from '../api';
 import { useAuth } from '../contexts/AuthContext';
 
 interface CrewMember {
@@ -147,6 +147,7 @@ export function CrewDashboard({ onLogout, onToast }: {
 }) {
   const { user } = useAuth();
   const [crewProfile, setCrewProfile] = useState<CrewMember | null>(null);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -171,6 +172,15 @@ export function CrewDashboard({ onLogout, onToast }: {
 
       if (profile) {
         setCrewProfile(profile as unknown as CrewMember);
+
+        // Check if admin's maintenance mode is enabled
+        const adminMaintenanceMode = await adminApi.getMaintenanceMode(profile.admin_id || '');
+        setMaintenanceMode(adminMaintenanceMode);
+
+        if (adminMaintenanceMode) {
+          setLoading(false);
+          return;
+        }
 
         // Get leave requests for this crew member
         const leaveRequests = await leaveRequestApi.getLeaveRequestsByCrew(user.id);
@@ -272,6 +282,41 @@ export function CrewDashboard({ onLogout, onToast }: {
         background: 'var(--bg)'
       }}>
         <div style={{ fontSize: 18, color: 'var(--muted)' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (maintenanceMode) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--bg)',
+        flexDirection: 'column',
+        gap: 20
+      }}>
+        <div style={{ fontSize: 64 }}>🔧</div>
+        <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--text)' }}>Maintenance Mode</div>
+        <div style={{ fontSize: 16, color: 'var(--muted)', textAlign: 'center', maxWidth: 400 }}>
+          Your store is currently under maintenance. Please contact your administrator for more information.
+        </div>
+        <button
+          onClick={onLogout}
+          style={{
+            padding: '12px 24px',
+            background: 'var(--accent)',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 8,
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          Logout
+        </button>
       </div>
     );
   }
