@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, resetPassword, sendEmailNotification } = require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, resetPassword, sendEmailNotification, sendWhatsAppNotification } = require('./database');
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
