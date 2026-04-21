@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, resetPassword, sendEmailNotification, sendWhatsAppNotification } = require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, sendEmailNotification, sendWhatsAppNotification } = require('./database');
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
@@ -198,7 +198,7 @@ app.post('/api/admin/reset-password', authenticateToken, async (req, res) => {
       }
     }
 
-    await resetPassword(userId, newPassword);
+    await dbClient.resetPassword(userId, newPassword);
     dbClient.logAudit(userId, 'admin', 'PASSWORD_RESET_SUCCESS', `Reset by ${user.userId === userId ? 'self' : 'admin'}`, ipAddress);
     res.json({ success: true });
   } catch (error) {
