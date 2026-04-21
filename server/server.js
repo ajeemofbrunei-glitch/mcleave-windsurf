@@ -14,13 +14,6 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
   const distPath = path.join(__dirname, '../../dist');
   app.use(express.static(distPath));
-  
-  // Fallback to index.html for SPA routes (must be last)
-  app.get(/.*/, (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(distPath, 'index.html'));
-    }
-  });
 }
 
 // Root route
@@ -322,3 +315,13 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   initDefaultAdmin();
 });
+// SPA fallback route (must be last)
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '../../dist');
+  app.get(/.*/, (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(distPath, 'index.html'));
+    }
+  });
+}
+
