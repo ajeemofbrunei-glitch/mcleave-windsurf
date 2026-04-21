@@ -6,21 +6,21 @@ const { dbClient, verifyPassword, generateToken, verifyToken } = require('./data
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Middleware
+app.use(cors());
+app.use(express.json());
+
 // Serve static frontend files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')));
   
-  // Fallback to index.html for SPA routes
-  app.get('*', (req, res) => {
+  // Fallback to index.html for SPA routes (must be last)
+  app.get(/.*/, (req, res) => {
     if (!req.path.startsWith('/api')) {
       res.sendFile(path.join(__dirname, '../dist/index.html'));
     }
   });
 }
-
-// Middleware
-app.use(cors());
-app.use(express.json());
 
 // Root route
 app.get('/', (req, res) => {
