@@ -16,6 +16,7 @@ WORKDIR /app
 
 # Install Python and build tools for SQLite
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Copy backend files
 COPY server/package*.json ./server/
