@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, resetPassword, sendEmailNotification, sendWhatsAppNotification } = require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, resetPassword, sendEmailNotification, sendWhatsAppNotification } = require('./database');
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
@@ -77,38 +77,38 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
     if (type === 'admin') {
       const admin = dbClient.getAdminByEmail(email);
       if (!admin) {
-        logAudit(null, 'admin', 'LOGIN_FAILED', `Email: ${email}`, ipAddress);
+        dbClient.logAudit(null, 'admin', 'LOGIN_FAILED', `Email: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Admin not found' });
       }
 
       if (admin.is_active === false || admin.is_active === 0) {
-        logAudit(admin.id, 'admin', 'LOGIN_BLOCKED', 'Account deactivated', ipAddress);
+        dbClient.logAudit(admin.id, 'admin', 'LOGIN_BLOCKED', 'Account deactivated', ipAddress);
         return res.status(403).json({ error: 'Account is deactivated. Please contact the administrator.' });
       }
 
       const isValid = await verifyPassword(password, admin.password);
       if (!isValid) {
-        logAudit(admin.id, 'admin', 'LOGIN_FAILED', `Email: ${email}`, ipAddress);
+        dbClient.logAudit(admin.id, 'admin', 'LOGIN_FAILED', `Email: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Invalid password' });
       }
 
-      logAudit(admin.id, 'admin', 'LOGIN_SUCCESS', `Email: ${email}`, ipAddress);
+      dbClient.logAudit(admin.id, 'admin', 'LOGIN_SUCCESS', `Email: ${email}`, ipAddress);
       const token = generateToken(admin.id, admin.role || 'store_admin');
       res.json({ token, user: { id: admin.id, email: admin.email, role: admin.role || 'store_admin' } });
     } else {
       const crew = dbClient.getCrewByUsername(email);
       if (!crew) {
-        logAudit(null, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
+        dbClient.logAudit(null, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Crew not found' });
       }
 
       const isValid = await verifyPassword(password, crew.password);
       if (!isValid) {
-        logAudit(crew.id, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
+        dbClient.logAudit(crew.id, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Invalid password' });
       }
 
-      logAudit(crew.id, 'crew', 'LOGIN_SUCCESS', `Username: ${email}`, ipAddress);
+      dbClient.logAudit(crew.id, 'crew', 'LOGIN_SUCCESS', `Username: ${email}`, ipAddress);
       const token = generateToken(crew.id, 'crew');
       res.json({ token, user: { id: crew.id, username: crew.username, role: 'crew' } });
     }
@@ -142,7 +142,7 @@ app.post('/api/auth/signup', async (req, res) => {
         is_active: true,
       });
 
-      logAudit(id, 'admin', 'ADMIN_CREATED', `Email: ${email}, Store: ${storeName}`, ipAddress);
+      dbClient.logAudit(id, 'admin', 'ADMIN_CREATED', `Email: ${email}, Store: ${storeName}`, ipAddress);
       const token = generateToken(admin.id, admin.role || 'store_admin');
       res.json({ token, user: { id: admin.id, email: admin.email, role: admin.role || 'store_admin' } });
     } else {
@@ -193,13 +193,13 @@ app.post('/api/admin/reset-password', authenticateToken, async (req, res) => {
       }
       const isValid = await verifyPassword(currentPassword, admin.password);
       if (!isValid) {
-        logAudit(userId, 'admin', 'PASSWORD_RESET_FAILED', 'Invalid current password', ipAddress);
+        dbClient.logAudit(userId, 'admin', 'PASSWORD_RESET_FAILED', 'Invalid current password', ipAddress);
         return res.status(401).json({ error: 'Current password is incorrect' });
       }
     }
 
     await resetPassword(userId, newPassword);
-    logAudit(userId, 'admin', 'PASSWORD_RESET_SUCCESS', `Reset by ${user.userId === userId ? 'self' : 'admin'}`, ipAddress);
+    dbClient.logAudit(userId, 'admin', 'PASSWORD_RESET_SUCCESS', `Reset by ${user.userId === userId ? 'self' : 'admin'}`, ipAddress);
     res.json({ success: true });
   } catch (error: any) {
     console.error('Error resetting password:', error);

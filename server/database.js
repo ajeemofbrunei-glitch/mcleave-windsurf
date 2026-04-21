@@ -461,4 +461,4 @@ const dbClient = {
   },
 };
 
-module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, getAuditLogs, resetPassword, sendEmailNotification, sendWhatsAppNotification };
+module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, resetPassword, sendEmailNotification, sendWhatsAppNotification };
