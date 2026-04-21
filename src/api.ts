@@ -255,4 +255,8 @@ export const systemApi = {
       body: JSON.stringify({ enabled }),
     });
   },
+
+  getReports: async (): Promise<any> => {
+    return apiCall('/reports');
+  },
 };

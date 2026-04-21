@@ -338,6 +338,62 @@ app.put('/api/admin/:id/maintenance-mode', authenticateToken, (req, res) => {
   }
 });
 
+// System reports endpoint
+app.get('/api/reports', authenticateToken, (req, res) => {
+  try {
+    const admins = dbClient.getAllAdmins();
+    const crews = db.prepare('SELECT * FROM crews').all();
+    const leaveRequests = db.prepare('SELECT * FROM leave_requests').all();
+
+    const totalAdmins = admins.length;
+    const totalCrews = crews.length;
+    const totalRequests = leaveRequests.length;
+
+    const pendingRequests = leaveRequests.filter(r => r.status === 'pending').length;
+    const approvedRequests = leaveRequests.filter(r => r.status === 'approved').length;
+    const deniedRequests = leaveRequests.filter(r => r.status === 'denied').length;
+
+    const requestsByStore = admins.map(admin => {
+      const storeRequests = leaveRequests.filter(r => r.admin_id === admin.id);
+      return {
+        store: admin.store_name,
+        location: admin.store_location,
+        total: storeRequests.length,
+        pending: storeRequests.filter(r => r.status === 'pending').length,
+        approved: storeRequests.filter(r => r.status === 'approved').length,
+        denied: storeRequests.filter(r => r.status === 'denied').length
+      };
+    });
+
+    const crewByStore = admins.map(admin => {
+      const storeCrews = crews.filter(c => c.admin_id === admin.id);
+      return {
+        store: admin.store_name,
+        location: admin.store_location,
+        totalCrews: storeCrews.length,
+        activeCrews: storeCrews.filter(c => c.is_active === 1).length
+      };
+    });
+
+    res.json({
+      summary: {
+        totalAdmins,
+        totalCrews,
+        totalRequests,
+        pendingRequests,
+        approvedRequests,
+        deniedRequests
+      },
+      requestsByStore,
+      crewByStore,
+      generatedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error generating report:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Initialize default admin account
 async function initDefaultAdmin() {
   try {

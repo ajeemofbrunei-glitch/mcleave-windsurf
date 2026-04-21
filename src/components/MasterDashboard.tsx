@@ -4,9 +4,10 @@ import { GodViewRequests } from './MasterPortal/GodViewRequests';
 import { UserManagement } from './MasterPortal/UserManagement';
 import { ExecutiveAnalytics } from './MasterPortal/ExecutiveAnalytics';
 import { SystemMaintenance } from './MasterPortal/SystemMaintenance';
+import { Reports } from './MasterPortal/Reports';
 import '../masterportal.css';
 
-type View = 'overview' | 'requests' | 'users' | 'maintenance';
+type View = 'overview' | 'requests' | 'users' | 'maintenance' | 'reports';
 
 interface MasterDashboardProps {
   onSignOut: () => void;
@@ -66,6 +67,14 @@ export function MasterDashboard({ onSignOut }: MasterDashboardProps) {
           </button>
 
           <button
+            className={`master-nav-item ${currentView === 'reports' ? 'active' : ''}`}
+            onClick={() => setCurrentView('reports')}
+          >
+            <span className="master-nav-icon">📈</span>
+            <span className="master-nav-label">Reports</span>
+          </button>
+
+          <button
             className={`master-nav-item ${currentView === 'maintenance' ? 'active' : ''}`}
             onClick={() => setCurrentView('maintenance')}
           >
@@ -81,6 +90,7 @@ export function MasterDashboard({ onSignOut }: MasterDashboardProps) {
             {currentView === 'overview' && 'Executive Analytics'}
             {currentView === 'requests' && 'Global Request Monitor'}
             {currentView === 'users' && 'User Management Console'}
+            {currentView === 'reports' && 'System Reports'}
             {currentView === 'maintenance' && 'System Health & Maintenance'}
           </h1>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
@@ -100,6 +110,7 @@ export function MasterDashboard({ onSignOut }: MasterDashboardProps) {
           {currentView === 'overview' && <ExecutiveAnalytics />}
           {currentView === 'requests' && <GodViewRequests />}
           {currentView === 'users' && <UserManagement />}
+          {currentView === 'reports' && <Reports />}
           {currentView === 'maintenance' && <SystemMaintenance onMaintenanceChange={setMaintenanceMode} />}
         </div>
       </main>
