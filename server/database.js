@@ -63,6 +63,7 @@ db.exec(`
     plan TEXT DEFAULT 'free',
     whatsapp_enabled INTEGER DEFAULT 0,
     is_active INTEGER DEFAULT 1,
+    maintenance_mode INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
@@ -71,6 +72,17 @@ db.exec(`
     maintenance_mode INTEGER DEFAULT 0
   );
 `);
+
+// Add maintenance_mode column to admin_profiles if it doesn't exist
+try {
+  const columns = db.prepare("PRAGMA table_info(admin_profiles)").all();
+  const hasMaintenanceMode = columns.some(col => col.name === 'maintenance_mode');
+  if (!hasMaintenanceMode) {
+    db.exec('ALTER TABLE admin_profiles ADD COLUMN maintenance_mode INTEGER DEFAULT 0');
+  }
+} catch (error) {
+  console.error('Error adding maintenance_mode column:', error);
+}
 
 // Insert default system settings
 const settings = db.prepare('SELECT * FROM system_settings WHERE id = 1').get();
