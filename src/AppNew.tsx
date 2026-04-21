@@ -259,21 +259,16 @@ function AppContent() {
         admin_note: note
       });
 
-      if (req.phone && (adminProfile?.plan || 'free') === 'pro' && adminProfile?.whatsapp_enabled) {
-        try {
-          await sendWhatsAppNotification(
-            req.phone,
-            req.crew_name,
-            req.leave_type,
-            req.date_start,
-            req.date_end,
-            status,
-            note
-          );
-          toast("WhatsApp Sent", `Notification sent to ${req.crew_name}`, "success", "📱");
-        } catch (whatsappError) {
-          console.error('WhatsApp notification failed:', whatsappError);
-        }
+      // Open WhatsApp with pre-filled message if crew has phone
+      if (req.phone) {
+        const message = `Hello ${req.crew_name}, your leave request (${req.leave_type}) from ${req.date_start} to ${req.date_end} has been ${status.toUpperCase()}.\n\n${note ? `Note: ${note}` : ''}`;
+        const formattedPhone = req.phone.replace(/[^0-9]/g, '');
+        const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+
+        // Open WhatsApp in new tab
+        window.open(whatsappUrl, '_blank');
+
+        toast("WhatsApp Opened", `WhatsApp opened for ${req.crew_name}`, "success", "📱");
       }
 
       setRequests(p => p.map(r => r.id === id ? updated : r));

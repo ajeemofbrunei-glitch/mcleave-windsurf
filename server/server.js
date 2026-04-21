@@ -436,6 +436,12 @@ app.put('/api/leave-requests/:id', authenticateToken, async (req, res) => {
           <p>Thank you for using the McLeave system.</p>
         `;
         sendEmailNotification(crew.email, `Leave Request ${statusText} - McLeave`, emailHtml);
+
+        // Send WhatsApp notification if phone available
+        if (crew.phone) {
+          const whatsappMessage = `Your leave request has been ${statusText.toLowerCase()}.\n\nLeave Type: ${request.leave_type}\nFrom: ${request.date_start}\nTo: ${request.date_end}\n\nThank you for using McLeave.`;
+          sendWhatsAppNotification(crew.phone, whatsappMessage);
+        }
       }
     }
 
