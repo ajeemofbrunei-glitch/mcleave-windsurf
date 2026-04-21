@@ -167,8 +167,8 @@ export function CrewDashboard({ onLogout, onToast }: {
     if (!user) return;
 
     try {
-      // Get crew profile by username
-      const profile = await crewApi.getCrewByUsername(user.username || '');
+      // Get crew profile by ID (more reliable than username)
+      const profile = await crewApi.getCrewById(user.id);
 
       if (profile) {
         setCrewProfile(profile as unknown as CrewMember);

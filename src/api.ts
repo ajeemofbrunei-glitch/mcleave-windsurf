@@ -164,6 +164,14 @@ export const adminApi = {
 
 // Crew API
 export const crewApi = {
+  getCrewById: async (crewId: string): Promise<Crew | null> => {
+    try {
+      return await apiCall(`/crews?crewId=${crewId}`);
+    } catch {
+      return null;
+    }
+  },
+
   getCrewByUsername: async (username: string): Promise<Crew | null> => {
     try {
       const crews = await apiCall('/crews');

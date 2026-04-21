@@ -291,9 +291,19 @@ app.post('/api/admin/reset-password', authenticateToken, async (req, res) => {
 // Crew endpoints
 app.get('/api/crews', async (req, res) => {
   try {
-    const { adminId } = req.query;
-    const crews = dbClient.getCrewsByAdmin(adminId);
-    res.json(crews);
+    const { adminId, crewId } = req.query;
+    if (crewId) {
+      // Get specific crew by ID
+      const crew = dbClient.getCrewById(crewId);
+      if (!crew) {
+        return res.status(404).json({ error: 'Crew not found' });
+      }
+      res.json(crew);
+    } else {
+      // Get crews by admin ID
+      const crews = dbClient.getCrewsByAdmin(adminId);
+      res.json(crews);
+    }
   } catch (error) {
     console.error('Error fetching crews:', error);
     res.status(500).json({ error: 'Internal server error' });

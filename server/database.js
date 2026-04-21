@@ -302,6 +302,11 @@ const dbClient = {
   },
 
   // Crew functions
+  getCrewById: (id) => {
+    const stmt = db.prepare('SELECT * FROM crews WHERE id = ?');
+    return stmt.get(id);
+  },
+
   getCrewByUsername: (username) => {
     const stmt = db.prepare('SELECT * FROM crews WHERE username = ?');
     return stmt.get(username);
