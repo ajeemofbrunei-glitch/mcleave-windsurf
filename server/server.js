@@ -12,12 +12,13 @@ app.use(express.json());
 
 // Serve static frontend files in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../dist')));
+  const distPath = path.join(__dirname, '../../dist');
+  app.use(express.static(distPath));
   
   // Fallback to index.html for SPA routes (must be last)
   app.get(/.*/, (req, res) => {
     if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(__dirname, '../dist/index.html'));
+      res.sendFile(path.join(distPath, 'index.html'));
     }
   });
 }
