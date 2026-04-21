@@ -60,6 +60,10 @@ app.post('/api/auth/signin', async (req, res) => {
         return res.status(401).json({ error: 'Admin not found' });
       }
 
+      if (admin.is_active === false || admin.is_active === 0) {
+        return res.status(403).json({ error: 'Account is deactivated. Please contact the administrator.' });
+      }
+
       const isValid = await verifyPassword(password, admin.password);
       if (!isValid) {
         return res.status(401).json({ error: 'Invalid password' });
@@ -284,6 +288,33 @@ app.put('/api/system/maintenance-mode', (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error('Error setting maintenance mode:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Per-store maintenance mode endpoints
+app.get('/api/admin/:id/maintenance-mode', authenticateToken, (req, res) => {
+  try {
+    const { id } = req.params;
+    const admin = dbClient.getAdminById(id);
+    if (!admin) {
+      return res.status(404).json({ error: 'Admin not found' });
+    }
+    res.json({ maintenanceMode: admin.maintenance_mode === 1 || admin.maintenance_mode === true });
+  } catch (error) {
+    console.error('Error fetching store maintenance mode:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/admin/:id/maintenance-mode', authenticateToken, (req, res) => {
+  try {
+    const { id } = req.params;
+    const { enabled } = req.body;
+    dbClient.updateAdmin(id, { maintenance_mode: enabled ? 1 : 0 });
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error setting store maintenance mode:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
