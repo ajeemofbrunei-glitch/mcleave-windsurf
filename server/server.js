@@ -73,6 +73,8 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
   const { email, password, type } = req.body;
   const ipAddress = req.ip || req.connection.remoteAddress;
 
+  console.log('Signin attempt:', { type, email, ipAddress });
+
   try {
     if (type === 'admin') {
       const admin = dbClient.getAdminByEmail(email);
@@ -96,7 +98,9 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
       const token = generateToken(admin.id, admin.role || 'store_admin');
       res.json({ token, user: { id: admin.id, email: admin.email, role: admin.role || 'store_admin' } });
     } else {
+      console.log('Crew login attempt for:', email);
       const crew = dbClient.getCrewByUsername(email);
+      console.log('Crew found:', !!crew);
       if (!crew) {
         dbClient.logAudit(null, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Crew not found' });
@@ -114,7 +118,7 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
     }
   } catch (error) {
     console.error('Sign in error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 
