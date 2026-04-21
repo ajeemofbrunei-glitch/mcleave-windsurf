@@ -97,8 +97,14 @@ export function CrewManagement({ onToast }: {
     setLoading(false);
   }
 
-  async function toggleCrewStatus(_crewId: string, _currentStatus: boolean) {
-    onToast('Info', 'Status toggle not available in local mode', 'info', 'ℹ️');
+  async function toggleCrewStatus(crewId: string, currentStatus: boolean) {
+    try {
+      await crewApi.updateCrew(crewId, { is_active: !currentStatus });
+      onToast('Success', `Crew member ${currentStatus ? 'deactivated' : 'activated'}`, 'success', '✅');
+      loadCrew();
+    } catch (error: any) {
+      onToast('Error', error.message || 'Failed to update crew status', 'denied', '❌');
+    }
   }
 
   async function deleteCrewMember(crewId: string) {
