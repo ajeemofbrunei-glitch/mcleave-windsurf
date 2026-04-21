@@ -10,6 +10,7 @@ interface AdminProfile {
   is_active?: boolean;
   created_at?: string;
   plan?: string;
+  maintenance_mode?: boolean;
 }
 
 interface CrewMember {
@@ -144,6 +145,17 @@ export function UserManagement() {
       loadUsers();
     } catch (error: any) {
       alert('Failed to update plan: ' + error.message);
+    }
+  };
+
+  const handleToggleMaintenanceMode = async (adminId: string, currentMode: boolean) => {
+    try {
+      await adminApi.setMaintenanceMode(adminId, !currentMode);
+      setToast(`Maintenance mode ${!currentMode ? 'enabled' : 'disabled'}`);
+      setTimeout(() => setToast(null), 3000);
+      loadUsers();
+    } catch (error: any) {
+      alert('Failed to update maintenance mode: ' + error.message);
     }
   };
 
@@ -289,6 +301,7 @@ export function UserManagement() {
                 <th>Role</th>
                 <th>Plan</th>
                 <th>Status</th>
+                <th>Maintenance</th>
                 <th>Created</th>
                 <th>Actions</th>
               </tr>
@@ -342,6 +355,11 @@ export function UserManagement() {
                       {admin.is_active !== false ? '✅ Active' : '⛔ Inactive'}
                     </span>
                   </td>
+                  <td>
+                    <span className={`maintenance-badge ${admin.maintenance_mode ? 'enabled' : 'disabled'}`}>
+                      {admin.maintenance_mode ? '🔧 Maintenance' : '✓ Normal'}
+                    </span>
+                  </td>
                   <td>{admin.created_at ? new Date(admin.created_at).toLocaleDateString() : 'N/A'}</td>
                   <td className="action-buttons">
                     {admin.role !== 'master_admin' && (
@@ -360,6 +378,12 @@ export function UserManagement() {
                           onClick={() => handleToggleAdminStatus(admin.id, admin.is_active ?? true)}
                         >
                           {admin.is_active !== false ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button
+                          className={admin.maintenance_mode ? 'btn-maintenance-disable' : 'btn-maintenance-enable'}
+                          onClick={() => handleToggleMaintenanceMode(admin.id, admin.maintenance_mode || false)}
+                        >
+                          {admin.maintenance_mode ? 'Disable Maintenance' : 'Enable Maintenance'}
                         </button>
                         <button
                           className="btn-reset"
@@ -511,6 +535,7 @@ export function UserManagement() {
       {showCreateAdmin && (
         <div className="modal-overlay" onClick={() => setShowCreateAdmin(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <style>{styles}</style>
             <div className="modal-header">
               <h3>Create New Store Admin Account</h3>
               <button className="modal-close" onClick={() => setShowCreateAdmin(false)}>×</button>
@@ -586,3 +611,53 @@ export function UserManagement() {
     </div>
   );
 }
+
+const styles = `
+  .maintenance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .maintenance-badge.enabled {
+    background: rgba(251, 191, 36, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+  .maintenance-badge.disabled {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+  }
+  .btn-maintenance-enable {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #f59e0b;
+    background: rgba(251, 191, 36, 0.1);
+    color: #f59e0b;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-maintenance-enable:hover {
+    background: rgba(251, 191, 36, 0.2);
+  }
+  .btn-maintenance-disable {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #22c55e;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-maintenance-disable:hover {
+    background: rgba(34, 197, 94, 0.2);
+  }
+`;

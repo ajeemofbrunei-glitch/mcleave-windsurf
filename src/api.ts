@@ -141,6 +141,18 @@ export const adminApi = {
   getAllAdmins: async (): Promise<AdminProfile[]> => {
     return apiCall('/admin/profiles');
   },
+
+  getMaintenanceMode: async (id: string): Promise<boolean> => {
+    const data = await apiCall(`/admin/${id}/maintenance-mode`);
+    return data.maintenanceMode;
+  },
+
+  setMaintenanceMode: async (id: string, enabled: boolean): Promise<void> => {
+    await apiCall(`/admin/${id}/maintenance-mode`, {
+      method: 'PUT',
+      body: JSON.stringify({ enabled }),
+    });
+  },
 };
 
 // Crew API
