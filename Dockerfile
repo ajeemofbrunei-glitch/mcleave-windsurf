@@ -37,6 +37,7 @@ EXPOSE 3001
 ENV NODE_ENV=production
 ENV PORT=3001
 ENV DB_PATH=/app/data/mcleave.db
+ENV DIST_PATH=/app/dist
 
 # Start server
 CMD ["node", "server/server.js"]

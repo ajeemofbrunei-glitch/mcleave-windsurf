@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Serve static frontend files in production
 if (process.env.NODE_ENV === 'production') {
-  const distPath = path.join(__dirname, '../../dist');
+  const distPath = process.env.DIST_PATH || path.join(__dirname, '../../dist');
   app.use(express.static(distPath));
   
   // Serve index.html at root
@@ -315,14 +315,9 @@ async function initDefaultAdmin() {
   }
 }
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  initDefaultAdmin();
-});
 // SPA fallback route (must be last)
 if (process.env.NODE_ENV === 'production') {
-  const distPath = path.join(__dirname, '../../dist');
+  const distPath = process.env.DIST_PATH || path.join(__dirname, '../../dist');
   app.get(/.*/, (req, res) => {
     if (!req.path.startsWith('/api')) {
       res.sendFile(path.join(distPath, 'index.html'));
@@ -330,3 +325,8 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  initDefaultAdmin();
+});
