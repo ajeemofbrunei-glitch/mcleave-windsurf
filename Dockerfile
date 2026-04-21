@@ -1,6 +1,6 @@
 # Multi-stage build for McLeave
 # Stage 1: Build frontend
-FROM node:18-alpine AS frontend-builder
+FROM node:18 AS frontend-builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -10,9 +10,12 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Setup backend
-FROM node:18-alpine
+FROM node:18
 
 WORKDIR /app
+
+# Install Python and build tools for SQLite
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 # Copy backend files
 COPY server/package*.json ./server/
