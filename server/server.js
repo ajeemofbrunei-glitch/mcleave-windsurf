@@ -433,9 +433,15 @@ app.put('/api/admin/:id/maintenance-mode', authenticateToken, (req, res) => {
 // System reports endpoint
 app.get('/api/reports', authenticateToken, (req, res) => {
   try {
+    console.log('Generating reports...');
     const admins = dbClient.getAllAdmins();
+    console.log('Admins:', admins.length);
+
     const crews = db.prepare('SELECT * FROM crews').all();
+    console.log('Crews:', crews.length);
+
     const leaveRequests = db.prepare('SELECT * FROM leave_requests').all();
+    console.log('Leave requests:', leaveRequests.length);
 
     const totalAdmins = admins.length;
     const totalCrews = crews.length;
@@ -467,6 +473,7 @@ app.get('/api/reports', authenticateToken, (req, res) => {
       };
     });
 
+    console.log('Report generated successfully');
     res.json({
       summary: {
         totalAdmins,
@@ -482,7 +489,7 @@ app.get('/api/reports', authenticateToken, (req, res) => {
     });
   } catch (error) {
     console.error('Error generating report:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 
