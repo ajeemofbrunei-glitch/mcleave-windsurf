@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { leaveRequestApi, crewApi, blockedDateApi } from '../api';
+import { leaveRequestApi, crewApi, blockedDateApi, adminApi } from '../api';
 import { useAuth } from '../contexts/AuthContext';
 
 interface DashboardStats {
@@ -29,6 +29,8 @@ export function AdminDashboard({ onNavigate }: { onNavigate: (tab: string) => vo
     blockedDates: 0,
     todayRequests: 0
   });
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadStats();
@@ -38,6 +40,16 @@ export function AdminDashboard({ onNavigate }: { onNavigate: (tab: string) => vo
     if (!user) return;
 
     try {
+      // Check if this admin's maintenance mode is enabled
+      const adminMaintenanceMode = await adminApi.getMaintenanceMode(user.id);
+      console.log('Maintenance mode for admin', user.id, ':', adminMaintenanceMode);
+      setMaintenanceMode(adminMaintenanceMode);
+
+      if (adminMaintenanceMode) {
+        setLoading(false);
+        return;
+      }
+
       const requests = await leaveRequestApi.getLeaveRequestsByAdmin(user.id);
       const crews = await crewApi.getCrewsByAdmin(user.id);
       const blocked = await blockedDateApi.getBlockedDatesByAdmin(user.id);
@@ -56,6 +68,42 @@ export function AdminDashboard({ onNavigate }: { onNavigate: (tab: string) => vo
     } catch (error) {
       console.error('Error loading dashboard stats:', error);
     }
+
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--bg)'
+      }}>
+        <div style={{ fontSize: 18, color: 'var(--muted)' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (maintenanceMode) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--bg)',
+        flexDirection: 'column',
+        gap: 20
+      }}>
+        <div style={{ fontSize: 64 }}>🔧</div>
+        <div style={{ fontSize: 24, fontWeight: 600, color: 'var(--text)' }}>Maintenance Mode</div>
+        <div style={{ fontSize: 16, color: 'var(--muted)', textAlign: 'center', maxWidth: 400 }}>
+          Your store is currently under maintenance. Please contact the Master Administrator for more information.
+        </div>
+      </div>
+    );
   }
 
   return (
