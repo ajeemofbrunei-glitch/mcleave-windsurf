@@ -152,6 +152,71 @@ async function verifyPassword(password, hash) {
 }
 
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+
+// Email configuration
+const emailTransporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: process.env.SMTP_PORT || 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER || '',
+    pass: process.env.SMTP_PASS || ''
+  }
+});
+
+async function sendEmailNotification(to, subject, html) {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.log('Email not configured - skipping notification');
+    return;
+  }
+
+  try {
+    await emailTransporter.sendMail({
+      from: process.env.SMTP_FROM || 'McLeave System <noreply@mcleave.com>',
+      to,
+      subject,
+      html
+    });
+    console.log('Email sent successfully to:', to);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
+
+async function sendWhatsAppNotification(phoneNumber, message) {
+  if (!process.env.WHATSAPP_API_KEY || !process.env.WHATSAPI_API_URL) {
+    console.log('WhatsApp not configured - skipping notification');
+    return;
+  }
+
+  try {
+    // Format phone number (remove any non-numeric characters and add country code if needed)
+    const formattedPhone = phoneNumber.replace(/[^0-9]/g, '');
+    
+    // Call WhatsApp API (placeholder - would need actual API integration)
+    // Example with a service like Twilio or WhatsApp Business API
+    const response = await fetch(process.env.WHATSAPI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.WHATSAPP_API_KEY}`
+      },
+      body: JSON.stringify({
+        phone: formattedPhone,
+        message: message
+      })
+    });
+
+    if (response.ok) {
+      console.log('WhatsApp sent successfully to:', formattedPhone);
+    } else {
+      console.error('WhatsApp API error:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error sending WhatsApp message:', error);
+  }
+}
 
 function generateToken(userId, role) {
   return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: '7d' });
@@ -396,4 +461,4 @@ const dbClient = {
   },
 };
 
-module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, getAuditLogs, resetPassword };
+module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, getAuditLogs, resetPassword, sendEmailNotification, sendWhatsAppNotification };

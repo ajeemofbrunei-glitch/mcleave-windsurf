@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, resetPassword } = require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, resetPassword, sendEmailNotification } = require('./database');
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
@@ -273,6 +273,25 @@ app.get('/api/leave-requests', async (req, res) => {
 app.post('/api/leave-requests', authenticateToken, (req, res) => {
   try {
     const request = dbClient.createLeaveRequest(req.body);
+
+    // Send email notification to admin
+    const admin = dbClient.getAdminById(request.admin_id);
+    if (admin) {
+      const emailHtml = `
+        <h2>New Leave Request</h2>
+        <p>A new leave request has been submitted:</p>
+        <ul>
+          <li><strong>Crew:</strong> ${request.crew_name}</li>
+          <li><strong>Leave Type:</strong> ${request.leave_type}</li>
+          <li><strong>From:</strong> ${request.date_start}</li>
+          <li><strong>To:</strong> ${request.date_end}</li>
+          <li><strong>Reason:</strong> ${request.reason}</li>
+        </ul>
+        <p>Please log in to the McLeave system to review this request.</p>
+      `;
+      sendEmailNotification(admin.email, 'New Leave Request - McLeave', emailHtml);
+    }
+
     res.json(request);
   } catch (error) {
     console.error('Error creating leave request:', error);
@@ -283,7 +302,34 @@ app.post('/api/leave-requests', authenticateToken, (req, res) => {
 app.put('/api/leave-requests/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
+    const updates = req.body;
+
+    // Get the request before updating to send notification
+    const requests = db.getLeaveRequestsByAdmin(updates.admin_id);
+    const request = requests.find(r => r.id === id);
+
     await dbClient.updateLeaveRequest(id, req.body);
+
+    // Send email notification to crew member
+    if (request && updates.status && (updates.status === 'approved' || updates.status === 'denied')) {
+      const crew = db.getCrewByUsername(request.crew_name);
+      if (crew) {
+        const statusText = updates.status === 'approved' ? 'Approved' : 'Denied';
+        const emailHtml = `
+          <h2>Leave Request ${statusText}</h2>
+          <p>Your leave request has been ${statusText.toLowerCase()}:</p>
+          <ul>
+            <li><strong>Leave Type:</strong> ${request.leave_type}</li>
+            <li><strong>From:</strong> ${request.date_start}</li>
+            <li><strong>To:</strong> ${request.date_end}</li>
+            <li><strong>Admin Note:</strong> ${updates.admin_note || 'No note provided'}</li>
+          </ul>
+          <p>Thank you for using the McLeave system.</p>
+        `;
+        sendEmailNotification(crew.email, `Leave Request ${statusText} - McLeave`, emailHtml);
+      }
+    }
+
     res.json({ success: true });
   } catch (error) {
     console.error('Error updating leave request:', error);
