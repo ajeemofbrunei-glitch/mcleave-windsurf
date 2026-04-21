@@ -1,6 +1,6 @@
 # Multi-stage build for McLeave
 # Stage 1: Build frontend
-FROM node:18 AS frontend-builder
+FROM node:20 AS frontend-builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Setup backend
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 
