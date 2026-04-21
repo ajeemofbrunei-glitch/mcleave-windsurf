@@ -51,7 +51,7 @@ export function CrewManagement({ onToast }: {
         phone: c.phone,
         designation: c.designation,
         id_no: '',
-        is_active: true,
+        is_active: c.is_active !== false, // Default to true if undefined
         created_at: c.created_at || ''
       })));
     } catch (error: any) {
