@@ -333,6 +333,16 @@ const dbClient = {
     return stmt.all(adminId);
   },
 
+  getAllCrews: () => {
+    const stmt = db.prepare('SELECT * FROM crews');
+    return stmt.all();
+  },
+
+  getAllLeaveRequests: () => {
+    const stmt = db.prepare('SELECT * FROM leave_requests');
+    return stmt.all();
+  },
+
   updateCrew: async (id, updates) => {
     const fields = [];
     const values = [];

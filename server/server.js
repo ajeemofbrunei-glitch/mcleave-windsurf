@@ -437,10 +437,10 @@ app.get('/api/reports', authenticateToken, (req, res) => {
     const admins = dbClient.getAllAdmins();
     console.log('Admins:', admins.length);
 
-    const crews = db.prepare('SELECT * FROM crews').all();
+    const crews = dbClient.getAllCrews();
     console.log('Crews:', crews.length);
 
-    const leaveRequests = db.prepare('SELECT * FROM leave_requests').all();
+    const leaveRequests = dbClient.getAllLeaveRequests();
     console.log('Leave requests:', leaveRequests.length);
 
     const totalAdmins = admins.length;
