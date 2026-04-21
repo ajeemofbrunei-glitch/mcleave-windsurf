@@ -180,6 +180,20 @@ export const crewApi = {
     });
   },
 
+  crewSignup: async (crew: {
+    name: string;
+    username: string;
+    phone: string;
+    designation: string;
+    password: string;
+    admin_id: string;
+  }): Promise<{ success: boolean; message: string }> => {
+    return apiCall('/auth/crew-signup', {
+      method: 'POST',
+      body: JSON.stringify(crew),
+    });
+  },
+
   getCrewsByAdmin: async (adminId: string): Promise<Crew[]> => {
     return apiCall(`/crews?adminId=${adminId}`);
   },

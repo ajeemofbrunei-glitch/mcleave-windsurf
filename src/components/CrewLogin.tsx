@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { adminApi } from '../api';
+import { adminApi, crewApi } from '../api';
 
 interface Store {
   id: string;
@@ -76,9 +76,17 @@ export function CrewLogin({ onSuccess }: { onSuccess: () => void }) {
         throw new Error('Password must be at least 6 characters');
       }
 
-      // Crew registration would need a separate API endpoint
-      // For now, just show a message
-      setSuccess('Registration successful! Please contact your administrator to activate your account.');
+      // Register crew member
+      await crewApi.crewSignup({
+        name: fullName,
+        username: email,
+        phone: phone || '',
+        designation,
+        password,
+        admin_id: selectedStore,
+      });
+
+      setSuccess('Registration successful! You can now sign in.');
       setFullName('');
       setEmail('');
       setPassword('');

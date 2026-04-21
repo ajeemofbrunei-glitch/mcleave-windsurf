@@ -159,6 +159,75 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 });
 
+// Crew self-registration endpoint
+app.post('/api/auth/crew-signup', authLimiter, async (req, res) => {
+  const { name, username, phone, designation, password, admin_id } = req.body;
+  const ipAddress = req.ip || req.connection.remoteAddress;
+
+  try {
+    // Validate required fields
+    if (!name || !username || !password || !admin_id || !designation) {
+      return res.status(400).json({ error: 'Please fill in all required fields' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+
+    // Check if username already exists
+    const existingCrew = dbClient.getCrewByUsername(username);
+    if (existingCrew) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
+    // Check if admin exists
+    const admin = dbClient.getAdminById(admin_id);
+    if (!admin) {
+      return res.status(400).json({ error: 'Selected store not found' });
+    }
+
+    // Create crew member
+    const id = `crew-${Date.now()}`;
+    const crew = await dbClient.createCrew({
+      id,
+      name,
+      username,
+      phone: phone || '',
+      designation,
+      password,
+      admin_id,
+      joined_at: new Date().toISOString(),
+      annual_leave_balance: 0,
+      leave_year: new Date().getFullYear(),
+    });
+
+    dbClient.logAudit(id, 'crew', 'CREW_CREATED', `Name: ${name}, Store: ${admin.store_name}`, ipAddress);
+
+    // Notify admin of new crew registration
+    const emailHtml = `
+      <h2>New Crew Member Registered</h2>
+      <p>A new crew member has registered for your store:</p>
+      <ul>
+        <li><strong>Name:</strong> ${name}</li>
+        <li><strong>Username:</strong> ${username}</li>
+        <li><strong>Designation:</strong> ${designation}</li>
+        <li><strong>Phone:</strong> ${phone || 'Not provided'}</li>
+      </ul>
+      <p>Please log in to the McLeave system to review this registration.</p>
+    `;
+    sendEmailNotification(admin.email, 'New Crew Registration - McLeave', emailHtml);
+
+    res.json({
+      success: true,
+      message: 'Registration successful! Please sign in.',
+      user: { id: crew.id, username: crew.username, role: 'crew' }
+    });
+  } catch (error) {
+    console.error('Crew sign up error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Admin endpoints
 app.get('/api/admin/profiles', async (req, res) => {
   try {
