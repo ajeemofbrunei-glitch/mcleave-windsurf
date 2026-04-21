@@ -65,7 +65,21 @@ const authenticateToken = (req, res, next) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' });
+  try {
+    // Check database connectivity
+    const stats = dbClient.getDatabaseStats();
+    res.json({
+      status: 'ok',
+      message: 'Server is running',
+      database: stats
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Database error',
+      error: error.message
+    });
+  }
 });
 
 // Auth endpoints
@@ -118,7 +132,11 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
     }
   } catch (error) {
     console.error('Sign in error:', error);
-    res.status(500).json({ error: 'Internal server error', details: error.message });
+    res.status(500).json({
+      error: 'Internal server error',
+      details: error.message,
+      stack: error.stack
+    });
   }
 });
 

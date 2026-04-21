@@ -474,6 +474,18 @@ const dbClient = {
     const stmt = db.prepare('SELECT * FROM admin_profiles ORDER BY created_at DESC');
     return stmt.all();
   },
+
+  // Database health check
+  getDatabaseStats: () => {
+    const adminCount = db.prepare('SELECT COUNT(*) as count FROM admin_profiles').get();
+    const crewCount = db.prepare('SELECT COUNT(*) as count FROM crews').get();
+    const requestCount = db.prepare('SELECT COUNT(*) as count FROM leave_requests').get();
+    return {
+      admins: adminCount.count,
+      crews: crewCount.count,
+      leaveRequests: requestCount.count
+    };
+  },
 };
 
 module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, sendEmailNotification, sendWhatsAppNotification };
