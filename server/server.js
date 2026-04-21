@@ -16,8 +16,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(distPath));
 }
 
-// Root route
-app.get('/', (req, res) => {
+// Root route - API info
+app.get('/api', (req, res) => {
   res.json({ message: 'McLeave Backend API', version: '1.0.0', endpoints: { health: '/api/health', auth: '/api/auth', crews: '/api/crews', 'leave-requests': '/api/leave-requests', 'blocked-dates': '/api/blocked-dates', admin: '/api/admin', system: '/api/system' } });
 });
 
