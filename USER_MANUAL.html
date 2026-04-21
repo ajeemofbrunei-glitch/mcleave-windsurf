@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McLeave™ User Manual</title>
+    <style>
+        @page {
+            margin: 2cm;
+            size: A4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: white;
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-size: 2.5em;
+            margin-bottom: 0.3em;
+            border-bottom: 4px solid #d32f2f;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #d32f2f;
+            font-size: 1.8em;
+            margin-top: 1.5em;
+            margin-bottom: 0.7em;
+            border-bottom: 2px solid #f5f5f5;
+            padding-bottom: 8px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            color: #424242;
+            font-size: 1.4em;
+            margin-top: 1.2em;
+            margin-bottom: 0.5em;
+            page-break-after: avoid;
+        }
+
+        h4 {
+            color: #616161;
+            font-size: 1.1em;
+            margin-top: 1em;
+            margin-bottom: 0.4em;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-bottom: 1em;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-bottom: 1em;
+            margin-left: 2em;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        strong {
+            color: #212121;
+            font-weight: 600;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 1em;
+            overflow-x: auto;
+            page-break-inside: avoid;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #d32f2f;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .toc {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 2em;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            border-bottom: none;
+        }
+
+        .toc ol {
+            margin-left: 1.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 1.5em;
+        }
+
+        .highlight {
+            background: #fff9c4;
+            padding: 15px;
+            border-left: 4px solid #fbc02d;
+            margin-bottom: 1em;
+            page-break-inside: avoid;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3em;
+            padding-top: 2em;
+            border-top: 2px solid #ddd;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 2em 0;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+
+            ul, ol, table {
+                page-break-inside: avoid;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>McLeave™ User Manual</h1>
+    <p class="subtitle">McDonald's Leave Management System</p>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li>Introduction</li>
+            <li>System Overview</li>
+            <li>Getting Started</li>
+            <li>Admin Portal</li>
+            <li>Crew Portal</li>
+            <li>Features Guide</li>
+            <li>Troubleshooting</li>
+            <li>FAQ</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>Introduction</h2>
+
+    <h3>What is McLeave™?</h3>
+    <p>McLeave™ is a comprehensive leave management system designed specifically for McDonald's crew members and managers. It streamlines the process of requesting, managing, and tracking employee leave requests.</p>
+
+    <h3>Key Benefits</h3>
+    <ul>
+        <li><strong>Paperless Process:</strong> All leave requests are submitted and managed digitally</li>
+        <li><strong>Real-time Updates:</strong> Instant notifications when requests are approved or denied</li>
+        <li><strong>Color-Coded Organization:</strong> Easy identification of different crew designations</li>
+        <li><strong>WhatsApp Integration:</strong> Send notifications directly to crew members</li>
+        <li><strong>Analytics Dashboard:</strong> Track leave patterns and manage crew availability</li>
+        <li><strong>Mobile-Friendly:</strong> Access the system from any device</li>
+    </ul>
+
+    <hr>
+
+    <h2>System Overview</h2>
+
+    <h3>User Roles</h3>
+
+    <h4>Administrator/Manager</h4>
+    <ul>
+        <li>Manage crew members</li>
+        <li>Review and respond to leave requests</li>
+        <li>Block specific dates (holidays, busy periods)</li>
+        <li>View analytics and reports</li>
+        <li>Export data to CSV</li>
+        <li>Reset crew passwords</li>
+    </ul>
+
+    <h4>Crew Member</h4>
+    <ul>
+        <li>Submit leave requests</li>
+        <li>View request history and status</li>
+        <li>Check available leave balance</li>
+        <li>View blocked dates</li>
+        <li>Cancel pending requests</li>
+    </ul>
+
+    <h3>Designation Types with Color Codes</h3>
+    <ul>
+        <li><strong>Crew Trainer</strong> - Blue</li>
+        <li><strong>Core Crew</strong> - Indigo</li>
+        <li><strong>Part Time Crew</strong> - Pink</li>
+        <li><strong>Barista</strong> - Yellow</li>
+        <li><strong>GEL</strong> - Green</li>
+        <li><strong>MDS</strong> - Red</li>
+        <li><strong>VIP</strong> - Purple</li>
+    </ul>
+
+    <hr>
+
+    <h2>Getting Started</h2>
+
+    <h3>System Requirements</h3>
+    <ul>
+        <li>Modern web browser (Chrome, Firefox, Safari, Edge)</li>
+        <li>Internet connection</li>
+        <li>Email address</li>
+        <li>WhatsApp (for notifications)</li>
+    </ul>
+
+    <h3>First Time Setup</h3>
+
+    <h4>For Store Managers</h4>
+    <ol>
+        <li>Navigate to the McLeave™ system URL</li>
+        <li>Click "Register as Admin"</li>
+        <li>Fill in the registration form:
+            <ul>
+                <li>Store name</li>
+                <li>Manager name</li>
+                <li>Email address</li>
+                <li>Password (minimum 6 characters)</li>
+            </ul>
+        </li>
+        <li>Click "Register"</li>
+        <li>Sign in with your credentials</li>
+    </ol>
+
+    <h4>For Crew Members</h4>
+    <ol>
+        <li>Navigate to the McLeave™ system URL</li>
+        <li>Click on "Crew Portal"</li>
+        <li>Click "Register here"</li>
+        <li>Fill in the registration form:
+            <ul>
+                <li>Full name</li>
+                <li>Employee ID number</li>
+                <li>Email address</li>
+                <li>Phone number (with country code, e.g., +673XXXXXXX)</li>
+                <li>Select your designation</li>
+                <li>Select your store location</li>
+                <li>Create a password (minimum 6 characters)</li>
+            </ul>
+        </li>
+        <li>Click "Register"</li>
+        <li>Wait for admin approval</li>
+        <li>Sign in once approved</li>
+    </ol>
+
+    <hr>
+
+    <h2>Admin Portal</h2>
+
+    <h3>Dashboard</h3>
+    <p>The admin dashboard provides an at-a-glance view of:</p>
+    <ul>
+        <li>Total leave requests</li>
+        <li>Pending requests (requires action)</li>
+        <li>Approved requests</li>
+        <li>Denied requests</li>
+        <li>Total crew members</li>
+        <li>Blocked dates</li>
+        <li>Today's requests</li>
+    </ul>
+
+    <h4>Quick Actions</h4>
+    <ul>
+        <li>Click on any stat card to filter requests</li>
+        <li>Navigate between tabs using the top menu</li>
+    </ul>
+
+    <h3>Managing Leave Requests</h3>
+
+    <h4>Viewing Requests</h4>
+    <ol>
+        <li>Click on the "Requests" tab</li>
+        <li>Use filters to narrow down:
+            <ul>
+                <li><strong>All:</strong> Show all requests</li>
+                <li><strong>Pending:</strong> Show only pending requests</li>
+                <li><strong>Approved:</strong> Show approved requests</li>
+                <li><strong>Denied:</strong> Show denied requests</li>
+            </ul>
+        </li>
+        <li>Use the search bar to find specific crew members or leave types</li>
+    </ol>
+
+    <h4>Processing a Request</h4>
+    <ol>
+        <li>Click on any request card to open details</li>
+        <li>Review the request information:
+            <ul>
+                <li>Crew member name and designation</li>
+                <li>Phone number</li>
+                <li>Leave type</li>
+                <li>Duration and dates</li>
+                <li>Reason provided</li>
+                <li>Submission timestamp (Brunei time)</li>
+            </ul>
+        </li>
+        <li>Add an optional note in the "Manager Response" field</li>
+        <li>Choose one of three actions:
+            <ul>
+                <li>✅ <strong>Approve:</strong> Grant the leave request</li>
+                <li>❌ <strong>Deny:</strong> Reject the leave request</li>
+                <li>⏳ <strong>Pending:</strong> Keep as pending (default status)</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Additional Actions</h4>
+    <ul>
+        <li>📱 <strong>Send WhatsApp Notification:</strong> Send the decision to the crew member via WhatsApp (only for approved/denied requests)</li>
+        <li>🗑️ <strong>Delete Request:</strong> Remove completed requests from the system (only for approved/denied requests)</li>
+    </ul>
+
+    <h4>Bulk Actions</h4>
+    <ol>
+        <li>Select multiple pending requests using checkboxes</li>
+        <li>Click "Approve Selected" or "Deny Selected"</li>
+        <li>Confirm the bulk action</li>
+        <li>All selected requests will be processed automatically</li>
+    </ol>
+
+    <h3>Crew Management</h3>
+
+    <h4>Viewing Crew Members</h4>
+    <ol>
+        <li>Click on "Crew Management" tab</li>
+        <li>View the complete list showing:
+            <ul>
+                <li>Name</li>
+                <li>Designation (color-coded)</li>
+                <li>Email</li>
+                <li>Phone number</li>
+                <li>Status (Active/Pending)</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Adding a Single Crew Member</h4>
+    <ol>
+        <li>Click "+ Add Crew" button</li>
+        <li>Fill in the form:
+            <ul>
+                <li>Full name</li>
+                <li>Email address</li>
+                <li>Phone number (optional)</li>
+                <li>Password (minimum 6 characters)</li>
+            </ul>
+        </li>
+        <li>Click "Add Crew Member"</li>
+        <li>The crew member can now sign in</li>
+    </ol>
+
+    <h4>Bulk Upload via Excel</h4>
+    <ol>
+        <li>Click "📊 Upload Excel" button</li>
+        <li>Click "Download Template File" to get the correct format</li>
+        <li>Fill in the template with crew information:
+            <ul>
+                <li>Name (required)</li>
+                <li>Email (required)</li>
+                <li>Password (required)</li>
+                <li>Phone (optional)</li>
+            </ul>
+        </li>
+        <li>Click "Select Excel or CSV File"</li>
+        <li>Choose your completed file</li>
+        <li>Wait for the upload to complete</li>
+        <li>Review the success/error message</li>
+    </ol>
+
+    <h4>Editing Crew Profiles</h4>
+    <ol>
+        <li>Find the crew member in the list</li>
+        <li>Click the "Edit" button</li>
+        <li>Update any of the following:
+            <ul>
+                <li>Full name</li>
+                <li>ID number</li>
+                <li>Email address</li>
+                <li>Phone number</li>
+                <li>Designation</li>
+            </ul>
+        </li>
+        <li>Click "Update Profile"</li>
+    </ol>
+
+    <h4>Resetting Crew Passwords</h4>
+    <ol>
+        <li>Click "Edit" on the crew member</li>
+        <li>Scroll to "Reset Password" section</li>
+        <li>Enter a new password (minimum 6 characters)</li>
+        <li>Click "Reset Password"</li>
+        <li>Confirm the action</li>
+        <li>Inform the crew member of their new password</li>
+    </ol>
+
+    <h4>Activating/Deactivating Crew Members</h4>
+    <ul>
+        <li><strong>Pending → Active:</strong> Click "Approve" button</li>
+        <li><strong>Active → Inactive:</strong> Click "Deactivate" button</li>
+        <li>Deactivated crew members cannot sign in or submit requests</li>
+    </ul>
+
+    <h4>Deleting Crew Members</h4>
+    <ol>
+        <li>Click the "Delete" button next to the crew member</li>
+        <li>Confirm the deletion</li>
+        <li><strong>Warning:</strong> This will also delete all their leave requests</li>
+    </ol>
+
+    <h3>Managing Blocked Dates</h3>
+
+    <h4>What are Blocked Dates?</h4>
+    <p>Blocked dates are days when crew members cannot request leave, typically:</p>
+    <ul>
+        <li>Public holidays</li>
+        <li>Store events</li>
+        <li>Peak business periods</li>
+        <li>Inventory days</li>
+    </ul>
+
+    <h4>Setting Blocked Dates</h4>
+    <ol>
+        <li>Click on "Block Dates" tab</li>
+        <li>Select dates on the calendar by clicking them</li>
+        <li>Selected dates turn red</li>
+        <li>Click again to unblock a date</li>
+    </ol>
+
+    <h4>Best Practices</h4>
+    <ul>
+        <li>Set blocked dates at least 2 weeks in advance</li>
+        <li>Communicate blocked dates to crew members</li>
+        <li>Review and update monthly</li>
+    </ul>
+
+    <h3>Analytics Dashboard</h3>
+
+    <h4>Viewing Analytics</h4>
+    <ol>
+        <li>Click on "Analytics" tab</li>
+        <li>View various metrics:
+            <ul>
+                <li>Leave requests by type</li>
+                <li>Requests by status</li>
+                <li>Trends over time</li>
+                <li>Crew availability</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Exporting Data</h4>
+    <ol>
+        <li>Click "Export to CSV" button</li>
+        <li>Choose the data type:
+            <ul>
+                <li>All requests</li>
+                <li>Filtered requests</li>
+                <li>Crew member list</li>
+            </ul>
+        </li>
+        <li>File downloads automatically</li>
+        <li>Open with Excel or Google Sheets</li>
+    </ol>
+
+    <h3>Settings</h3>
+
+    <h4>Updating Login Credentials</h4>
+    <ol>
+        <li>Click on "Settings" tab</li>
+        <li>Enter current password</li>
+        <li>Enter new username</li>
+        <li>Enter new password (minimum 6 characters)</li>
+        <li>Confirm new password</li>
+        <li>Click "Update Credentials"</li>
+    </ol>
+
+    <h4>Store Profile</h4>
+    <ul>
+        <li>Update store name</li>
+        <li>Update manager name</li>
+        <li>Update contact information</li>
+    </ul>
+
+    <hr>
+
+    <h2>Crew Portal</h2>
+
+    <h3>Dashboard</h3>
+    <p>The crew dashboard shows:</p>
+    <ul>
+        <li>Total leave requests submitted</li>
+        <li>Pending requests</li>
+        <li>Approved requests</li>
+        <li>Denied requests</li>
+        <li>Current leave balance</li>
+    </ul>
+
+    <h3>Submitting a Leave Request</h3>
+
+    <h4>Step-by-Step Guide</h4>
+    <ol>
+        <li>Click on "+ New Request" tab</li>
+        <li>Select the leave type:
+            <ul>
+                <li><strong>Off Day:</strong> Regular day off</li>
+                <li><strong>Annual Leave:</strong> Vacation leave (deducted from balance)</li>
+                <li><strong>Morning Shift:</strong> Half-day morning</li>
+                <li><strong>Afternoon Shift:</strong> Half-day afternoon</li>
+                <li><strong>Birthday Leave:</strong> Birthday celebration (deducted from balance)</li>
+            </ul>
+        </li>
+        <li>Select date range using the calendar:
+            <ul>
+                <li>Click start date</li>
+                <li>Click end date</li>
+                <li>Red dates are blocked and cannot be selected</li>
+            </ul>
+        </li>
+        <li>Enter reason for leave</li>
+        <li>Review the request summary</li>
+        <li>Click "Submit Request"</li>
+    </ol>
+
+    <h4>What Happens Next?</h4>
+    <ol>
+        <li>Request goes to "Pending" status</li>
+        <li>Manager receives notification</li>
+        <li>Manager reviews and responds</li>
+        <li>You receive notification of the decision</li>
+        <li>If approved and deductible, leave balance is updated</li>
+    </ol>
+
+    <h3>Viewing Request Status</h3>
+
+    <h4>Request History</h4>
+    <ol>
+        <li>Click on "📋 My Orders" tab</li>
+        <li>View all your requests with:
+            <ul>
+                <li>Status indicator (Pending/Approved/Denied)</li>
+                <li>Leave type</li>
+                <li>Date range</li>
+                <li>Submission timestamp (Brunei time)</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Request Details</h4>
+    <ol>
+        <li>Click on any request card</li>
+        <li>View complete details:
+            <ul>
+                <li>Your information</li>
+                <li>Leave type and duration</li>
+                <li>Reason submitted</li>
+                <li>Manager's response note (if any)</li>
+                <li>Status</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Canceling Requests</h4>
+    <ul>
+        <li><strong>Pending requests:</strong> Can be canceled anytime</li>
+        <li><strong>Approved/Denied requests:</strong> Cannot be canceled (contact manager)</li>
+    </ul>
+
+    <h3>Understanding Leave Balance</h3>
+
+    <h4>Leave Types That Deduct Balance</h4>
+    <ul>
+        <li>Annual Leave</li>
+        <li>Birthday Leave</li>
+    </ul>
+
+    <h4>Leave Types That Don't Deduct Balance</h4>
+    <ul>
+        <li>Off Day</li>
+        <li>Morning Shift</li>
+        <li>Afternoon Shift</li>
+    </ul>
+
+    <h4>Checking Your Balance</h4>
+    <ul>
+        <li>View in the header: "X days left"</li>
+        <li>Default annual leave: 14 days</li>
+        <li>Balance updates immediately upon approval</li>
+    </ul>
+
+    <h3>Profile Management</h3>
+
+    <h4>Viewing Your Profile</h4>
+    <ul>
+        <li>Name and designation shown in header</li>
+        <li>Contact information in request details</li>
+    </ul>
+
+    <h4>Updating Information</h4>
+    <p>Contact your manager to update:</p>
+    <ul>
+        <li>Name</li>
+        <li>Email</li>
+        <li>Phone number</li>
+        <li>Designation</li>
+    </ul>
+
+    <hr>
+
+    <h2>Features Guide</h2>
+
+    <h3>WhatsApp Notifications</h3>
+
+    <h4>Setting Up</h4>
+    <ol>
+        <li>Ensure crew member phone numbers include country code</li>
+        <li>Format: +673XXXXXXX (Brunei) or +60XXXXXXXXX (Malaysia)</li>
+        <li>Numbers must be active WhatsApp accounts</li>
+    </ol>
+
+    <h4>Sending Notifications</h4>
+    <ol>
+        <li>Open a request with approved/denied status</li>
+        <li>Click "📱 Send WhatsApp Notification"</li>
+        <li>WhatsApp web opens with pre-filled message</li>
+        <li>Review and send the message</li>
+    </ol>
+
+    <h4>Notification Template</h4>
+    <pre>Hi [Crew Name],
+
+Your leave request has been [APPROVED/DENIED].
+
+Leave Type: [Type]
+Dates: [Start Date] to [End Date]
+
+[Manager's note if provided]
+
+- McLeave Management</pre>
+
+    <h3>Color-Coded Designations</h3>
+
+    <h4>Why Color Coding?</h4>
+    <ul>
+        <li>Quick visual identification</li>
+        <li>Easy filtering and sorting</li>
+        <li>Better organization of crew types</li>
+        <li>Improved workflow efficiency</li>
+    </ul>
+
+    <h4>Using Color Codes</h4>
+    <ul>
+        <li>All designation badges are color-coded throughout the system</li>
+        <li>Request cards show crew designation with color</li>
+        <li>Crew management table displays designation colors</li>
+        <li>Colors consistent across all views</li>
+    </ul>
+
+    <h3>Time Zone (Brunei Time)</h3>
+
+    <h4>What is Brunei Time?</h4>
+    <ul>
+        <li>UTC+8 (Brunei Darussalam Time)</li>
+        <li>All timestamps displayed in Brunei time</li>
+        <li>Request submissions recorded in Brunei time</li>
+        <li>Manager responses timestamped in Brunei time</li>
+    </ul>
+
+    <h4>Why Brunei Time?</h4>
+    <ul>
+        <li>Consistent time reference for all users</li>
+        <li>Avoids confusion from different time zones</li>
+        <li>Matches local business hours</li>
+    </ul>
+
+    <h3>Leave Balance Tracking</h3>
+
+    <h4>How It Works</h4>
+    <ol>
+        <li>Each crew member starts with 14 days annual leave</li>
+        <li>When Annual Leave or Birthday Leave is approved:
+            <ul>
+                <li>Days are calculated from date range</li>
+                <li>Balance is automatically deducted</li>
+                <li>Updated balance shows immediately</li>
+            </ul>
+        </li>
+        <li>Balance is persistent across sessions</li>
+        <li>Cannot request more days than available balance</li>
+    </ol>
+
+    <h4>Balance Management Best Practices</h4>
+    <ul>
+        <li>Check balance before submitting requests</li>
+        <li>Plan leave in advance</li>
+        <li>Balance resets annually (admin managed)</li>
+    </ul>
+
+    <hr>
+
+    <h2>Troubleshooting</h2>
+
+    <h3>Common Issues and Solutions</h3>
+
+    <h4>Cannot Sign In</h4>
+    <div class="highlight">
+        <p><strong>Problem:</strong> "Invalid email or password" error</p>
+        <p><strong>Solutions:</strong></p>
+        <ol>
+            <li>Verify email address is correct</li>
+            <li>Check password (case-sensitive)</li>
+            <li>Click "Forgot Password" if available</li>
+            <li>Contact manager to reset password (crew members)</li>
+            <li>Ensure account is active (not deactivated)</li>
+        </ol>
+    </div>
+
+    <div class="highlight">
+        <p><strong>Problem:</strong> "Your account has been deactivated"</p>
+        <p><strong>Solutions:</strong></p>
+        <ol>
+            <li>Contact your manager</li>
+            <li>Manager needs to reactivate your account</li>
+            <li>Check if you're using the correct email</li>
+        </ol>
+    </div>
+
+    <h4>Registration Issues</h4>
+    <div class="highlight">
+        <p><strong>Problem:</strong> "Email already exists"</p>
+        <p><strong>Solutions:</strong></p>
+        <ol>
+            <li>You may already have an account - try signing in</li>
+            <li>Use a different email address</li>
+            <li>Contact manager if you forgot your password</li>
+        </ol>
+    </div>
+
+    <h4>Leave Request Problems</h4>
+    <div class="highlight">
+        <p><strong>Problem:</strong> Cannot select dates on calendar</p>
+        <p><strong>Solutions:</strong></p>
+        <ol>
+            <li>Red dates are blocked - choose different dates</li>
+            <li>Ensure you're selecting future dates (not past)</li>
+            <li>Check if you have sufficient leave balance</li>
+            <li>Try clicking again - may need to select start date first</li>
+        </ol>
+    </div>
+
+    <h3>Error Messages Explained</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Error Message</th>
+                <th>Meaning</th>
+                <th>Solution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Invalid credentials</td>
+                <td>Wrong email or password</td>
+                <td>Check spelling, reset password</td>
+            </tr>
+            <tr>
+                <td>Please fill in all required fields</td>
+                <td>Missing information</td>
+                <td>Fill all fields marked with *</td>
+            </tr>
+            <tr>
+                <td>Password must be at least 6 characters</td>
+                <td>Password too short</td>
+                <td>Use longer password</td>
+            </tr>
+            <tr>
+                <td>Email already exists</td>
+                <td>Email in use</td>
+                <td>Use different email or sign in</td>
+            </tr>
+            <tr>
+                <td>Account deactivated</td>
+                <td>Account disabled</td>
+                <td>Contact manager</td>
+            </tr>
+            <tr>
+                <td>Insufficient leave balance</td>
+                <td>Not enough days remaining</td>
+                <td>Choose fewer days or different leave type</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>FAQ</h2>
+
+    <h3>General Questions</h3>
+
+    <p><strong>Q: Is McLeave™ free to use?</strong></p>
+    <p>A: Contact your system administrator for pricing and licensing information.</p>
+
+    <p><strong>Q: Can I access McLeave™ from my phone?</strong></p>
+    <p>A: Yes! McLeave™ is fully responsive and works on all devices - phones, tablets, and computers.</p>
+
+    <p><strong>Q: What browsers are supported?</strong></p>
+    <p>A: Chrome, Firefox, Safari, and Edge (latest versions recommended).</p>
+
+    <p><strong>Q: Is my data secure?</strong></p>
+    <p>A: Yes, McLeave™ uses industry-standard security with Supabase authentication and encrypted connections.</p>
+
+    <h3>For Crew Members</h3>
+
+    <p><strong>Q: How much annual leave do I have?</strong></p>
+    <p>A: Each crew member starts with 14 days annually. Check your balance in the header when signed in.</p>
+
+    <p><strong>Q: Can I cancel a leave request?</strong></p>
+    <p>A: Yes, but only if it's still pending. Contact your manager to cancel approved requests.</p>
+
+    <p><strong>Q: Why can't I select certain dates?</strong></p>
+    <p>A: Red dates on the calendar are blocked by management (holidays, busy periods, etc.).</p>
+
+    <p><strong>Q: What's the difference between leave types?</strong></p>
+    <p>A:</p>
+    <ul>
+        <li><strong>Annual Leave & Birthday Leave:</strong> Deducted from your balance</li>
+        <li><strong>Off Day, Morning/Afternoon Shift:</strong> Not deducted from balance</li>
+    </ul>
+
+    <h3>For Managers/Admins</h3>
+
+    <p><strong>Q: How many crew members can I add?</strong></p>
+    <p>A: There's no limit on the number of crew members per store.</p>
+
+    <p><strong>Q: Can I approve requests in bulk?</strong></p>
+    <p>A: Yes! Select multiple pending requests and click "Approve Selected" or "Deny Selected".</p>
+
+    <p><strong>Q: How do I export leave data?</strong></p>
+    <p>A: Click "Analytics" tab, then "Export to CSV". The file can be opened in Excel.</p>
+
+    <p><strong>Q: Can I undo an approval?</strong></p>
+    <p>A: Yes, open the request and change status to "Denied" or "Pending".</p>
+
+    <p><strong>Q: How do I reset a crew member's password?</strong></p>
+    <p>A: Click "Edit" on the crew member, scroll to "Reset Password", enter new password, and click "Reset Password".</p>
+
+    <hr>
+
+    <h2>Best Practices</h2>
+
+    <h3>For Crew Members</h3>
+    <ul>
+        <li>✅ Submit leave requests at least 1 week in advance</li>
+        <li>✅ Provide clear reasons for leave</li>
+        <li>✅ Check blocked dates before requesting</li>
+        <li>✅ Monitor your leave balance regularly</li>
+        <li>✅ Keep your contact information updated</li>
+        <li>✅ Cancel requests promptly if plans change</li>
+        <li>❌ Don't submit duplicate requests</li>
+        <li>❌ Don't request leave for blocked dates</li>
+    </ul>
+
+    <h3>For Managers</h3>
+    <ul>
+        <li>✅ Review requests within 24-48 hours</li>
+        <li>✅ Provide feedback in response notes</li>
+        <li>✅ Set blocked dates in advance</li>
+        <li>✅ Keep crew information updated</li>
+        <li>✅ Use bulk actions for efficiency</li>
+        <li>✅ Export data monthly for records</li>
+        <li>✅ Communicate decisions via WhatsApp</li>
+        <li>✅ Monitor analytics for patterns</li>
+        <li>❌ Don't delete recent requests</li>
+        <li>❌ Don't approve requests without review</li>
+    </ul>
+
+    <hr>
+
+    <h2>Appendix</h2>
+
+    <h3>Phone Number Formats</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Country</th>
+                <th>Format</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Brunei</td>
+                <td>+673XXXXXXX</td>
+                <td>+6738234567</td>
+            </tr>
+            <tr>
+                <td>Malaysia</td>
+                <td>+60XXXXXXXXX</td>
+                <td>+60123456789</td>
+            </tr>
+            <tr>
+                <td>Singapore</td>
+                <td>+65XXXXXXXX</td>
+                <td>+6591234567</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Leave Type Matrix</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Leave Type</th>
+                <th>Deducts Balance</th>
+                <th>Half Day</th>
+                <th>Requires Approval</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Off Day</td>
+                <td>No</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Annual Leave</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Morning Shift</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Afternoon Shift</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Birthday Leave</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Browser Compatibility</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Browser</th>
+                <th>Minimum Version</th>
+                <th>Recommended</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Chrome</td>
+                <td>90+</td>
+                <td>Latest</td>
+            </tr>
+            <tr>
+                <td>Firefox</td>
+                <td>88+</td>
+                <td>Latest</td>
+            </tr>
+            <tr>
+                <td>Safari</td>
+                <td>14+</td>
+                <td>Latest</td>
+            </tr>
+            <tr>
+                <td>Edge</td>
+                <td>90+</td>
+                <td>Latest</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Glossary</h2>
+
+    <p><strong>Admin:</strong> Store manager or supervisor with full access to manage crew and requests</p>
+
+    <p><strong>Annual Leave:</strong> Paid vacation time deducted from yearly balance</p>
+
+    <p><strong>Blocked Dates:</strong> Days when leave requests cannot be submitted</p>
+
+    <p><strong>Bulk Action:</strong> Processing multiple requests simultaneously</p>
+
+    <p><strong>Crew Member:</strong> Employee who can submit and view their own leave requests</p>
+
+    <p><strong>Deductible Leave:</strong> Leave types that reduce annual leave balance</p>
+
+    <p><strong>Designation:</strong> Crew member role/position with color-coding</p>
+
+    <p><strong>Leave Balance:</strong> Remaining days of annual leave available</p>
+
+    <p><strong>Pending Request:</strong> Leave request awaiting manager review</p>
+
+    <p><strong>Status:</strong> Current state of request (Pending, Approved, Denied)</p>
+
+    <p><strong>Timestamp:</strong> Date and time in Brunei Time (UTC+8)</p>
+
+    <hr>
+
+    <div class="footer">
+        <p><strong>McLeave™</strong> - I'm Scheduling It™</p>
+        <p>This manual is maintained and updated regularly. Last updated: April 2026</p>
+        <p>© 2026 McLeave™. All rights reserved.</p>
+    </div>
+
+</body>
+</html>

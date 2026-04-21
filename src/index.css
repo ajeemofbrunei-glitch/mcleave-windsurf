@@ -1,0 +1,130 @@
+:root {
+  --mc-red: #DA291C;
+  --mc-red-dark: #b71c1c;
+  --mc-yellow: #FFC72C;
+  --mc-yellow-light: #FFD662;
+
+  --text: #333333;
+  --text-h: #1a1a1a;
+  --text-muted: #666666;
+  --bg: #ffffff;
+  --bg-light: #fafafa;
+  --border: #e8e8e8;
+  --code-bg: #f5f5f5;
+
+  --accent: var(--mc-red);
+  --accent-bg: rgba(218, 41, 28, 0.08);
+  --accent-border: rgba(218, 41, 28, 0.3);
+  --accent-hover: var(--mc-red-dark);
+
+  --success: #27AE60;
+  --success-bg: rgba(39, 174, 96, 0.1);
+  --warning: var(--mc-yellow);
+  --warning-bg: rgba(255, 199, 44, 0.1);
+  --error: #E74C3C;
+  --error-bg: rgba(231, 76, 60, 0.1);
+
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+
+  --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'SF Mono', Consolas, Monaco, monospace;
+
+  font: 16px/150% var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 15px;
+  }
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--mc-red);
+}
+
+body {
+  margin: 0;
+  background: var(--mc-red);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--heading);
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  letter-spacing: -0.5px;
+  @media (max-width: 1024px) {
+    font-size: 28px;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  letter-spacing: -0.3px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+
+h3 {
+  font-size: 18px;
+  letter-spacing: -0.2px;
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+p {
+  margin: 0;
+  line-height: 150%;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 6px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 14px;
+  line-height: 140%;
+  padding: 3px 6px;
+  background: var(--code-bg);
+}
+
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}

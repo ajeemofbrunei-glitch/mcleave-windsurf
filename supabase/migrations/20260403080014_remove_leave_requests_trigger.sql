@@ -1,0 +1,1 @@
+DROP TRIGGER IF EXISTS update_leave_requests_updated_at ON leave_requests;
