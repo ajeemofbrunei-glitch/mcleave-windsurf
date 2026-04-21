@@ -172,14 +172,25 @@ export function CrewDashboard({ onLogout, onToast }: {
 
       if (profile) {
         setCrewProfile(profile as unknown as CrewMember);
+        console.log('Crew profile loaded:', profile);
 
         // Check if admin's maintenance mode is enabled
-        const adminMaintenanceMode = await adminApi.getMaintenanceMode(profile.admin_id || '');
-        setMaintenanceMode(adminMaintenanceMode);
+        if (profile.admin_id) {
+          try {
+            const adminMaintenanceMode = await adminApi.getMaintenanceMode(profile.admin_id);
+            console.log('Maintenance mode for admin', profile.admin_id, ':', adminMaintenanceMode);
+            setMaintenanceMode(adminMaintenanceMode);
 
-        if (adminMaintenanceMode) {
-          setLoading(false);
-          return;
+            if (adminMaintenanceMode) {
+              setLoading(false);
+              return;
+            }
+          } catch (error) {
+            console.error('Error fetching maintenance mode:', error);
+            // Continue loading even if maintenance mode check fails
+          }
+        } else {
+          console.warn('Crew member has no admin_id:', profile);
         }
 
         // Get leave requests for this crew member
