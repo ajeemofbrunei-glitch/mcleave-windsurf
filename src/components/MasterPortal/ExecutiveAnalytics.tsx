@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { leaveRequestApi, adminApi, crewApi } from '../../api';
 
-interface AdminProfile {
-  id: string;
-  store_location: string;
-}
-
 interface StoreActivity {
   store: string;
   pending: number;

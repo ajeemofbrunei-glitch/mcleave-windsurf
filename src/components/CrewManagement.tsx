@@ -97,7 +97,7 @@ export function CrewManagement({ onToast }: {
     setLoading(false);
   }
 
-  async function toggleCrewStatus(crewId: string, currentStatus: boolean) {
+  async function toggleCrewStatus(_crewId: string, _currentStatus: boolean) {
     onToast('Info', 'Status toggle not available in local mode', 'info', 'ℹ️');
   }
 

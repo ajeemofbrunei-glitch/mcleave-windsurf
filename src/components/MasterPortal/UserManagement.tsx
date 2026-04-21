@@ -114,7 +114,7 @@ export function UserManagement() {
     }
   };
 
-  const handleDeleteUser = async (type: 'admin' | 'crew', _userId: string) => {
+  const _handleDeleteUser = async (type: 'admin' | 'crew', _userId: string) => {
     if (confirm(`Are you sure you want to delete this ${type}?`)) {
       setToast('Delete not available in local mode');
     }

@@ -17,11 +17,6 @@ interface LeaveRequest {
   admin_id: string;
 }
 
-interface AdminProfile {
-  id: string;
-  store_location: string;
-}
-
 const STORES = ['ALL', 'GADONG', 'JPDT', 'KIULAP', 'MULAUT', 'SERIA', 'AIRPORT', 'DELIMA'];
 
 const STATUS_CONFIG = {
