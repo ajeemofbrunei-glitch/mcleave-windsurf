@@ -261,7 +261,20 @@ function AppContent() {
 
       // Open WhatsApp with pre-filled message if crew has phone
       if (req.phone) {
-        const message = `Hello ${req.crew_name}, your leave request (${req.leave_type}) from ${req.date_start} to ${req.date_end} has been ${status.toUpperCase()}.\n\n${note ? `Note: ${note}` : ''}`;
+        const icon = status === 'approved' ? '✅' : '❌';
+        const message = `${icon} *McLeave Leave Request ${status.toUpperCase()}*
+
+Hi ${req.crew_name},
+
+Your leave request has been ${status.toUpperCase()}.
+
+📋 *Details:*
+• Type: ${req.leave_type}
+• Dates: ${req.date_start} to ${req.date_end}
+${note ? `\n📝 *Note:* ${note}` : ''}
+
+---
+🍟 McDonald's McLeave System`;
         const formattedPhone = req.phone.replace(/[^0-9]/g, '');
         const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
 
