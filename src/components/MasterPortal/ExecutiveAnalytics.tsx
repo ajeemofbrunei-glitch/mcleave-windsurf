@@ -6,13 +6,6 @@ interface AdminProfile {
   store_location: string;
 }
 
-interface LeaveRequest {
-  id: string;
-  status: string;
-  submitted_at: string;
-  admin_id: string;
-}
-
 interface StoreActivity {
   store: string;
   pending: number;

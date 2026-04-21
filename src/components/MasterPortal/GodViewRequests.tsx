@@ -52,10 +52,10 @@ export function GodViewRequests() {
     setLoading(true);
 
     try {
-      const admins = await adminApi.getAllAdmins();
+      const adminsData = await adminApi.getAllAdmins();
       const allRequests: any[] = [];
 
-      for (const admin of admins) {
+      for (const admin of adminsData) {
         const requests = await leaveRequestApi.getLeaveRequestsByAdmin(admin.id);
         allRequests.push(...requests.map(r => ({ ...r, store_location: admin.store_location })));
       }
@@ -238,7 +238,7 @@ export function GodViewRequests() {
             <div className="modal-body">
               <div className="detail-row">
                 <span className="detail-label">Store:</span>
-                <span className="detail-value">{admins.get(selectedRequest.admin_id)}</span>
+                <span className="detail-value">{(selectedRequest as any).store_location || 'Unknown'}</span>
               </div>
               <div className="detail-row">
                 <span className="detail-label">Crew Name:</span>

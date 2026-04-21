@@ -87,11 +87,11 @@ export function UserManagement() {
     }
   };
 
-  const handleUpdateCrewStore = async (crewId: string) => {
+  const handleUpdateCrewStore = async (_crewId: string) => {
     setToast('Crew store update not available in local mode');
   };
 
-  const handleResetPassword = async (email: string) => {
+  const handleResetPassword = async (_email: string) => {
     setToast('Password reset not available in local mode');
   };
 
@@ -114,13 +114,13 @@ export function UserManagement() {
     }
   };
 
-  const handleDeleteUser = async (type: 'admin' | 'crew', userId: string) => {
+  const handleDeleteUser = async (type: 'admin' | 'crew', _userId: string) => {
     if (confirm(`Are you sure you want to delete this ${type}?`)) {
       setToast('Delete not available in local mode');
     }
   };
 
-  const handleDeleteAdmin = async (adminId: string, email: string) => {
+  const handleDeleteAdmin = async (_adminId: string, email: string) => {
     if (!confirm(`Are you sure you want to permanently delete the admin account for ${email}? This action cannot be undone.`)) {
       return;
     }
@@ -128,7 +128,7 @@ export function UserManagement() {
     setToast('Delete not available in local mode');
   };
 
-  const handleDeleteCrew = async (crewId: string, name: string) => {
+  const handleDeleteCrew = async (_crewId: string, name: string) => {
     if (!confirm(`Are you sure you want to permanently delete the crew account for ${name}? This action cannot be undone.`)) {
       return;
     }
@@ -357,7 +357,7 @@ export function UserManagement() {
                         </button>
                         <button
                           className={admin.is_active !== false ? 'btn-deactivate' : 'btn-activate'}
-                          onClick={() => handleToggleAdminStatus(admin.id, admin.is_active)}
+                          onClick={() => handleToggleAdminStatus(admin.id, admin.is_active ?? true)}
                         >
                           {admin.is_active !== false ? 'Deactivate' : 'Activate'}
                         </button>
