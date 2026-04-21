@@ -74,7 +74,7 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS audit_logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL,
+    user_id TEXT,
     user_type TEXT NOT NULL,
     action TEXT NOT NULL,
     details TEXT,
@@ -92,6 +92,32 @@ try {
   }
 } catch (error) {
   console.error('Error adding maintenance_mode column:', error);
+}
+
+// Fix audit_logs user_id constraint - allow NULL for failed login attempts
+try {
+  const columns = db.prepare("PRAGMA table_info(audit_logs)").all();
+  const userIdColumn = columns.find(col => col.name === 'user_id');
+  if (userIdColumn && userIdColumn.notnull === 1) {
+    // Recreate table with nullable user_id
+    db.exec(`
+      CREATE TABLE audit_logs_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT,
+        user_type TEXT NOT NULL,
+        action TEXT NOT NULL,
+        details TEXT,
+        ip_address TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+      INSERT INTO audit_logs_new SELECT * FROM audit_logs;
+      DROP TABLE audit_logs;
+      ALTER TABLE audit_logs_new RENAME TO audit_logs;
+    `);
+    console.log('Fixed audit_logs user_id constraint');
+  }
+} catch (error) {
+  console.error('Error fixing audit_logs constraint:', error);
 }
 
 // Insert default system settings
