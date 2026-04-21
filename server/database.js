@@ -100,8 +100,8 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_crews_admin_id ON crews(admin_id);
 `);
 
-// JWT Secret
-const JWT_SECRET = 'your-secret-key-change-in-production';
+// JWT Secret - use environment variable in production
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 // Auth functions
 async function hashPassword(password) {

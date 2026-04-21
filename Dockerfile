@@ -38,6 +38,8 @@ ENV NODE_ENV=production
 ENV PORT=3001
 ENV DB_PATH=/app/data/mcleave.db
 ENV DIST_PATH=/app/dist
+ENV JWT_SECRET=change-this-to-a-random-secret-key-in-production
+ENV ALLOWED_ORIGINS=https://your-render-url.onrender.com
 
 # Start server
 CMD ["node", "server/server.js"]

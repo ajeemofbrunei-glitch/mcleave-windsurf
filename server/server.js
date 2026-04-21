@@ -3,11 +3,30 @@ const cors = require('cors');
 const path = require('path');
 const { dbClient, verifyPassword, generateToken, verifyToken } = require('./database');
 
+// Rate limiting
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: { error: 'Too many requests from this IP, please try again later.' }
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 login attempts per windowMs
+  message: { error: 'Too many login attempts, please try again later.' }
+});
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(limiter);
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173', 'http://localhost:3001'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static frontend files in production
@@ -50,7 +69,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Auth endpoints
-app.post('/api/auth/signin', async (req, res) => {
+app.post('/api/auth/signin', authLimiter, async (req, res) => {
   const { email, password, type } = req.body;
 
   try {
