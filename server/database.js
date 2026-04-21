@@ -71,6 +71,16 @@ db.exec(`
     id INTEGER PRIMARY KEY CHECK (id = 1),
     maintenance_mode INTEGER DEFAULT 0
   );
+
+  CREATE TABLE IF NOT EXISTS audit_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    user_type TEXT NOT NULL,
+    action TEXT NOT NULL,
+    details TEXT,
+    ip_address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Add maintenance_mode column to admin_profiles if it doesn't exist
@@ -106,6 +116,35 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 // Auth functions
 async function hashPassword(password) {
   return bcrypt.hash(password, 10);
+}
+
+function validatePassword(password) {
+  const errors = [];
+
+  if (password.length < 8) {
+    errors.push('Password must be at least 8 characters long');
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+
+  if (!/[0-9]/.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    errors.push('Password must contain at least one special character');
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
 }
 
 async function verifyPassword(password, hash) {
@@ -329,6 +368,16 @@ const dbClient = {
     stmt.run(enabled ? 1 : 0);
   },
 
+  logAudit: (userId, userType, action, details, ipAddress) => {
+    const stmt = db.prepare('INSERT INTO audit_logs (user_id, user_type, action, details, ip_address) VALUES (?, ?, ?, ?, ?)');
+    stmt.run(userId, userType, action, details, ipAddress);
+  },
+
+  getAuditLogs: (limit = 100) => {
+    const stmt = db.prepare('SELECT * FROM audit_logs ORDER BY created_at DESC LIMIT ?');
+    return stmt.all(limit);
+  },
+
   // Get all admins (for master admin)
   getAllAdmins: () => {
     const stmt = db.prepare('SELECT * FROM admin_profiles ORDER BY created_at DESC');
@@ -336,4 +385,4 @@ const dbClient = {
   },
 };
 
-module.exports = { dbClient, verifyPassword, generateToken, verifyToken };
+module.exports = { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit, getAuditLogs };

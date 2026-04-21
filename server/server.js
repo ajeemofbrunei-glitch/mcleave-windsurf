@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken } = require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, logAudit } = require('./database');
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
@@ -71,36 +71,44 @@ app.get('/api/health', (req, res) => {
 // Auth endpoints
 app.post('/api/auth/signin', authLimiter, async (req, res) => {
   const { email, password, type } = req.body;
+  const ipAddress = req.ip || req.connection.remoteAddress;
 
   try {
     if (type === 'admin') {
       const admin = dbClient.getAdminByEmail(email);
       if (!admin) {
+        logAudit(null, 'admin', 'LOGIN_FAILED', `Email: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Admin not found' });
       }
 
       if (admin.is_active === false || admin.is_active === 0) {
+        logAudit(admin.id, 'admin', 'LOGIN_BLOCKED', 'Account deactivated', ipAddress);
         return res.status(403).json({ error: 'Account is deactivated. Please contact the administrator.' });
       }
 
       const isValid = await verifyPassword(password, admin.password);
       if (!isValid) {
+        logAudit(admin.id, 'admin', 'LOGIN_FAILED', `Email: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Invalid password' });
       }
 
+      logAudit(admin.id, 'admin', 'LOGIN_SUCCESS', `Email: ${email}`, ipAddress);
       const token = generateToken(admin.id, admin.role || 'store_admin');
       res.json({ token, user: { id: admin.id, email: admin.email, role: admin.role || 'store_admin' } });
     } else {
       const crew = dbClient.getCrewByUsername(email);
       if (!crew) {
+        logAudit(null, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Crew not found' });
       }
 
       const isValid = await verifyPassword(password, crew.password);
       if (!isValid) {
+        logAudit(crew.id, 'crew', 'LOGIN_FAILED', `Username: ${email}`, ipAddress);
         return res.status(401).json({ error: 'Invalid password' });
       }
 
+      logAudit(crew.id, 'crew', 'LOGIN_SUCCESS', `Username: ${email}`, ipAddress);
       const token = generateToken(crew.id, 'crew');
       res.json({ token, user: { id: crew.id, username: crew.username, role: 'crew' } });
     }
@@ -112,8 +120,15 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
 
 app.post('/api/auth/signup', async (req, res) => {
   const { email, password, storeName, type } = req.body;
+  const ipAddress = req.ip || req.connection.remoteAddress;
 
   try {
+    // Validate password complexity
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      return res.status(400).json({ error: 'Password does not meet requirements', details: passwordValidation.errors });
+    }
+
     if (type === 'admin') {
       const id = `admin-${Date.now()}`;
       const admin = await dbClient.createAdmin({
@@ -127,6 +142,7 @@ app.post('/api/auth/signup', async (req, res) => {
         is_active: true,
       });
 
+      logAudit(id, 'admin', 'ADMIN_CREATED', `Email: ${email}, Store: ${storeName}`, ipAddress);
       const token = generateToken(admin.id, admin.role || 'store_admin');
       res.json({ token, user: { id: admin.id, email: admin.email, role: admin.role || 'store_admin' } });
     } else {
