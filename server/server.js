@@ -414,14 +414,14 @@ app.put('/api/leave-requests/:id', authenticateToken, async (req, res) => {
     const updates = req.body;
 
     // Get the request before updating to send notification
-    const requests = db.getLeaveRequestsByAdmin(updates.admin_id);
+    const requests = dbClient.getLeaveRequestsByAdmin(updates.admin_id);
     const request = requests.find(r => r.id === id);
 
     await dbClient.updateLeaveRequest(id, req.body);
 
     // Send email notification to crew member
     if (request && updates.status && (updates.status === 'approved' || updates.status === 'denied')) {
-      const crew = db.getCrewByUsername(request.crew_name);
+      const crew = dbClient.getCrewByUsername(request.crew_name);
       if (crew) {
         const statusText = updates.status === 'approved' ? 'Approved' : 'Denied';
         const emailHtml = `
