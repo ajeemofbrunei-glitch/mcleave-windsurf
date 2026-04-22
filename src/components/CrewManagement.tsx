@@ -44,16 +44,21 @@ export function CrewManagement({ onToast }: {
     setLoading(true);
     try {
       const crews = await crewApi.getCrewsByAdmin(user.id);
-      setCrew(crews.map(c => ({
-        id: c.id,
-        full_name: c.name,
-        email: c.username,
-        phone: c.phone,
-        designation: c.designation,
-        id_no: '',
-        is_active: c.is_active !== false, // Default to true if undefined
-        created_at: c.created_at || ''
-      })));
+      console.log('Loaded crews:', crews);
+      setCrew(crews.map(c => {
+        const isActive = c.is_active === 1 || c.is_active === true;
+        console.log('Crew:', c.name, 'is_active raw:', c.is_active, '-> boolean:', isActive);
+        return {
+          id: c.id,
+          full_name: c.name,
+          email: c.username,
+          phone: c.phone,
+          designation: c.designation,
+          id_no: '',
+          is_active: isActive,
+          created_at: c.created_at || ''
+        };
+      }));
     } catch (error: any) {
       onToast('Error', error.message || 'Failed to load crew', 'denied', '❌');
     }
