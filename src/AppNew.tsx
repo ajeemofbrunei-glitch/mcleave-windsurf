@@ -261,18 +261,23 @@ function AppContent() {
 
       // Open WhatsApp with pre-filled message if crew has phone
       if (req.phone) {
-        const icon = status === 'approved' ? '%E2%9C%85' : '%E2%9D%8C';
-        const message = icon + '%20*McLeave%20Leave%20Request%20' + encodeURIComponent(status.toUpperCase()) + '*%0A%0A' +
-          'Hi%20' + encodeURIComponent(req.crew_name) + ',%0A%0A' +
-          'Your%20leave%20request%20has%20been%20' + encodeURIComponent(status.toUpperCase()) + '.%0A%0A' +
-          '%F0%9F%93%8B%20*Details:*%0A' +
-          '%E2%80%A2%20Type:%20' + encodeURIComponent(req.leave_type) + '%0A' +
-          '%E2%80%A2%20Dates:%20' + encodeURIComponent(req.date_start) + '%20to%20' + encodeURIComponent(req.date_end) +
-          (note ? '%0A%0A%F0%9F%93%9D%20*Note:*%20' + encodeURIComponent(note) : '') +
-          '%0A%0A---%0A' +
-          '%F0%9F%8D%9F%20McDonald\'s%20McLeave%20System';
+        const icon = status === 'approved' ? '[OK]' : '[X]';
+        const rawMessage = `${icon} *McLeave Leave Request ${status.toUpperCase()}*
+
+Hi ${req.crew_name},
+
+Your leave request has been ${status.toUpperCase()}.
+
+*Details:*
+- Type: ${req.leave_type}
+- Dates: ${req.date_start} to ${req.date_end}
+${note ? `\n*Note:* ${note}` : ''}
+
+---
+McDonald's McLeave System`;
         const formattedPhone = req.phone.replace(/[^0-9]/g, '');
-        const whatsappUrl = `https://wa.me/${formattedPhone}?text=${message}`;
+        const encodedMessage = encodeURIComponent(rawMessage);
+        const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
 
         // Open WhatsApp in new tab
         window.open(whatsappUrl, '_blank');
