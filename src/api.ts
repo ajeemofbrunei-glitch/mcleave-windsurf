@@ -207,10 +207,13 @@ export const crewApi = {
   },
 
   updateCrew: async (id: string, updates: Partial<Crew>): Promise<void> => {
-    await apiCall(`/crews/${id}`, {
+    console.log('API updateCrew called:', { id, updates });
+    const response = await apiCall(`/crews/${id}`, {
       method: 'PUT',
       body: JSON.stringify(updates),
     });
+    console.log('API updateCrew response:', response);
+    return response;
   },
 
   deleteCrew: async (id: string): Promise<void> => {
