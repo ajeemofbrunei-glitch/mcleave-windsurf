@@ -98,11 +98,18 @@ export function CrewManagement({ onToast }: {
   }
 
   async function toggleCrewStatus(crewId: string, currentStatus: boolean) {
+    console.log('Toggling crew status:', { crewId, currentStatus, newStatus: !currentStatus });
     try {
-      await crewApi.updateCrew(crewId, { is_active: !currentStatus });
+      const response = await crewApi.updateCrew(crewId, { is_active: !currentStatus });
+      console.log('Update response:', response);
       onToast('Success', `Crew member ${currentStatus ? 'deactivated' : 'activated'}`, 'success', '✅');
-      loadCrew();
+      // Wait a moment for DB to update, then reload
+      setTimeout(() => {
+        console.log('Reloading crew data...');
+        loadCrew();
+      }, 500);
     } catch (error: any) {
+      console.error('Toggle error:', error);
       onToast('Error', error.message || 'Failed to update crew status', 'denied', '❌');
     }
   }
