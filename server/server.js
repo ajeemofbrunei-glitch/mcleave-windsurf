@@ -341,11 +341,13 @@ app.post('/api/crews', authenticateToken, async (req, res) => {
 app.put('/api/crews/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('Crew update request:', { id, body: req.body });
     await dbClient.updateCrew(id, req.body);
+    console.log('Crew updated successfully:', id);
     res.json({ success: true });
   } catch (error) {
     console.error('Error updating crew:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 

@@ -378,21 +378,33 @@ const dbClient = {
     const fields = [];
     const values = [];
     
+    console.log('updateCrew called:', { id, updates });
+    
     if (updates.name !== undefined) { fields.push('name = ?'); values.push(updates.name); }
     if (updates.phone !== undefined) { fields.push('phone = ?'); values.push(updates.phone); }
     if (updates.designation !== undefined) { fields.push('designation = ?'); values.push(updates.designation); }
     if (updates.annual_leave_balance !== undefined) { fields.push('annual_leave_balance = ?'); values.push(updates.annual_leave_balance); }
-    if (updates.is_active !== undefined) { fields.push('is_active = ?'); values.push(updates.is_active ? 1 : 0); }
+    if (updates.is_active !== undefined) { 
+      console.log('is_active update:', updates.is_active, '->', updates.is_active ? 1 : 0);
+      fields.push('is_active = ?'); 
+      values.push(updates.is_active ? 1 : 0); 
+    }
     if (updates.password !== undefined) { 
       const hashed = await hashPassword(updates.password);
       fields.push('password = ?'); values.push(hashed); 
     }
     
-    if (fields.length === 0) return;
+    if (fields.length === 0) {
+      console.log('No fields to update for crew:', id);
+      return;
+    }
     
     values.push(id);
-    const stmt = db.prepare(`UPDATE crews SET ${fields.join(', ')} WHERE id = ?`);
-    stmt.run(...values);
+    const sql = `UPDATE crews SET ${fields.join(', ')} WHERE id = ?`;
+    console.log('Executing SQL:', sql, 'values:', values);
+    const stmt = db.prepare(sql);
+    const result = stmt.run(...values);
+    console.log('Update result:', result);
   },
 
   deleteCrew: (id) => {
