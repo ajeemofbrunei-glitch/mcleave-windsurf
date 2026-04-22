@@ -1,7 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, sendEmailNotification, sendWhatsAppNotification } = require('./database');
+
+// Use PostgreSQL on Render, SQLite locally
+const usePostgres = !!process.env.DATABASE_URL;
+const dbModule = usePostgres ? require('./database-pg') : require('./database');
+const { dbClient, verifyPassword, generateToken, verifyToken, validatePassword, sendEmailNotification, sendWhatsAppNotification } = dbModule;
+
+console.log(`Using database: ${usePostgres ? 'PostgreSQL' : 'SQLite'}`);
 
 // Rate limiting
 const rateLimit = require('express-rate-limit');
@@ -648,7 +654,19 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  initDefaultAdmin();
+async function startServer() {
+  // Initialize database (PostgreSQL needs async init)
+  if (usePostgres && dbClient.init) {
+    await dbClient.init();
+  }
+  
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    initDefaultAdmin();
+  });
+}
+
+startServer().catch(err => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
 });
